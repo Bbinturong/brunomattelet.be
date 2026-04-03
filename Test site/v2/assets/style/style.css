@@ -1,0 +1,759 @@
+/* ===================================================================
+   BRUNO • STUDIO — v2
+   =================================================================== */
+
+/* FONTS */
+@font-face {
+  font-family: 'faction';
+  src: url("../../assets/style/font/faction.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syne';
+  src: url("../../assets/style/font/Syne-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syne-semi';
+  src: url("../../assets/style/font/Syne-SemiBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syne-bold';
+  src: url("../../assets/style/font/Syne-ExtraBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* RESET */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+ul { list-style: none; }
+a { text-decoration: none; color: inherit; }
+
+/* BASE */
+:root {
+  --left: 240px;
+  --content-width: 960px;
+  --page-width: 1440px;
+  --nav-left: 120px;
+  --black: #000;
+  --white: #fff;
+  --purple: #e3bdff;
+}
+
+html {
+  background: var(--white);
+}
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'syne', sans-serif;
+  font-size: 24px;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* ===================================================================
+   HEADER / NAV
+   =================================================================== */
+
+header {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--page-width);
+  height: 20px;
+  z-index: 1000;
+  font-family: 'syne', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+}
+
+.nav-logo {
+  position: absolute;
+  left: var(--nav-left);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.1em;
+  font-weight: normal;
+}
+
+.nav-links {
+  position: absolute;
+  right: var(--nav-left);
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 60px;
+}
+
+.nav-links a {
+  position: relative;
+  letter-spacing: 0.05em;
+}
+
+/* Active dot indicator below nav link */
+.nav-links a.active::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--black);
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ===================================================================
+   PAGE WRAPPER
+   =================================================================== */
+
+main {
+  padding-top: 140px;
+  position: relative;
+}
+
+/* ===================================================================
+   SECTION TITLES (faction outline font)
+   =================================================================== */
+
+.section-title {
+  font-family: 'faction', sans-serif;
+  font-size: 96px;
+  text-transform: uppercase;
+  line-height: 1;
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ===================================================================
+   CONTENT AREA
+   =================================================================== */
+
+.content {
+  margin-left: var(--left);
+  max-width: var(--content-width);
+}
+
+/* ===================================================================
+   HOME PAGE
+   =================================================================== */
+
+/* Decorative border box (fixed/sticky on right side) */
+.deco-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 550px;
+  height: 550px;
+  border: 1px solid var(--black);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* "hey," section */
+.hey-section {
+  margin-left: var(--left);
+  position: relative;
+  z-index: 1;
+}
+
+.hey-section .section-title {
+  margin-bottom: 60px;
+}
+
+.hey-text {
+  max-width: 760px;
+  font-family: 'syne', sans-serif;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0.05em;
+}
+
+.hey-text p + p {
+  margin-top: 36px;
+}
+
+.hey-text a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* "works" section on home */
+.home-works-section {
+  margin-left: var(--left);
+  margin-top: 160px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-works-section .section-title {
+  margin-bottom: 60px;
+}
+
+.works-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.works-list li {
+  font-family: 'syne-bold', sans-serif;
+  font-size: 48px;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  padding: 20px 0;
+  border-bottom: none;
+}
+
+.works-list li a {
+  display: inline-block;
+  position: relative;
+  transition: opacity 0.2s;
+}
+
+.works-list li a:hover {
+  opacity: 0.5;
+}
+
+/* "contact" section on home */
+.home-contact-section {
+  margin-left: var(--left);
+  margin-top: 200px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-contact-section .section-title {
+  margin-bottom: 60px;
+}
+
+.contact-text {
+  max-width: 760px;
+  font-family: 'syne', sans-serif;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0.05em;
+}
+
+.contact-text p + p {
+  margin-top: 36px;
+}
+
+.contact-text .discuss-link {
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ===================================================================
+   WORKS LIST PAGE
+   =================================================================== */
+
+.works-page-title {
+  color: var(--purple);
+}
+
+.works-page-section {
+  margin-left: var(--left);
+  position: relative;
+  z-index: 1;
+}
+
+/* Decorative box on works page */
+.works-deco-box {
+  position: absolute;
+  top: 185px;
+  left: 50%;
+  transform: translateX(-50%) translateX(130px);
+  width: 700px;
+  height: 500px;
+  border: 1px solid var(--black);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Dot on works page */
+.works-dot {
+  position: absolute;
+  top: 26px;
+  right: 151px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--black);
+}
+
+/* ===================================================================
+   WORKS/AAA PROJECT PAGE
+   =================================================================== */
+
+.aaa-section {
+  position: relative;
+  margin-left: var(--left);
+  margin-right: 240px;
+  margin-top: 60px;
+}
+
+/* The slot-machine title container */
+.aaa-title-container {
+  position: relative;
+  width: 960px;
+  height: 600px;
+  border: 1px solid var(--black);
+  margin: 0 auto;
+  left: -240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.aaa-title-stack {
+  position: relative;
+  height: 390px; /* 5 items × ~78px */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.aaa-title-item {
+  font-family: 'syne-bold', sans-serif;
+  font-size: 48px;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+  text-align: center;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+  user-select: none;
+}
+
+.aaa-title-item.active {
+  color: var(--black);
+  -webkit-text-stroke: 0;
+}
+
+/* Project metadata row */
+.aaa-meta {
+  display: flex;
+  width: 960px;
+  margin: 0 auto;
+  left: -240px;
+  position: relative;
+  margin-top: 40px;
+}
+
+.aaa-meta-item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.aaa-meta-item::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 190px;
+  height: 1px;
+  background: var(--black);
+}
+
+.aaa-meta-label {
+  font-family: 'syne-semi', sans-serif;
+  font-size: 16px;
+  line-height: 36px;
+  letter-spacing: 0.05em;
+}
+
+/* Content sections */
+.aaa-content {
+  margin-left: var(--left);
+  margin-top: 60px;
+}
+
+.aaa-content-section {
+  margin-bottom: 80px;
+}
+
+.aaa-content-title {
+  font-family: 'syne-bold', sans-serif;
+  font-size: 34px;
+  letter-spacing: 0.05em;
+  line-height: 50px;
+  margin-bottom: 20px;
+}
+
+.aaa-content-text {
+  font-family: 'syne', sans-serif;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0.05em;
+  max-width: 960px;
+}
+
+/* Image pair */
+.aaa-images {
+  margin-left: var(--left);
+  margin-top: 60px;
+  display: flex;
+  gap: 20px;
+  width: 960px;
+}
+
+.aaa-image-box {
+  flex: 1;
+  height: 600px;
+  border: 1px solid var(--black);
+}
+
+/* ===================================================================
+   ABOUT PAGE
+   =================================================================== */
+
+.about-section {
+  margin-left: var(--left);
+  position: relative;
+  z-index: 1;
+}
+
+.about-bio {
+  max-width: 760px;
+  font-family: 'syne', sans-serif;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0.05em;
+  margin-top: 60px;
+}
+
+.about-image-box {
+  width: 100%;
+  max-width: 960px;
+  height: 600px;
+  border: 1px solid var(--black);
+  margin-top: 60px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.about-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.about-image-box:after {
+  content: 'click to see me';
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  display: block;
+  padding: 20px;
+  max-width: 60px;
+  border-radius: 30px;
+  background-color: black;
+  position: absolute;
+  top: calc(50% - 32px);
+  right: calc(50% - 50px);
+  animation: rotating 42s infinite linear;
+}
+
+@keyframes rotating {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Skills section */
+.skills-section {
+  margin-left: var(--left);
+  margin-top: 160px;
+  position: relative;
+  z-index: 1;
+}
+
+.skills-section .section-title {
+  margin-bottom: 60px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px 120px;
+}
+
+.skill-col h3 {
+  font-family: 'syne-semi', sans-serif;
+  font-size: 16px;
+  color: #BBB8BF;
+  line-height: 50px;
+  border-bottom: 1px solid var(--black);
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+
+.skill-col ul li {
+  font-family: 'syne-semi', sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  margin: 20px 0;
+  letter-spacing: 0.03em;
+}
+
+/* Resume section */
+.resume-section {
+  margin-left: var(--left);
+  margin-top: 160px;
+  position: relative;
+  z-index: 1;
+}
+
+.resume-section .section-title {
+  margin-bottom: 60px;
+}
+
+.resume-list {
+  max-width: 760px;
+}
+
+.resume-item {
+  border-left: 2px solid var(--black);
+  padding: 40px 20px;
+  margin-bottom: 40px;
+}
+
+.resume-item h4 {
+  font-family: 'syne-semi', sans-serif;
+  font-size: 14px;
+  color: grey;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.resume-item h2 {
+  font-family: 'syne-bold', sans-serif;
+  font-size: 34px;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.resume-item p {
+  font-family: 'syne-semi', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+
+footer {
+  position: relative;
+  height: 98px;
+  margin-left: var(--left);
+  width: var(--content-width);
+  margin-top: 160px;
+  margin-bottom: 60px;
+  font-family: 'syne', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+}
+
+.footer-links {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 0;
+}
+
+.footer-links a {
+  margin-right: 60px;
+  font-variant-numeric: lining-nums;
+}
+
+.footer-rule {
+  position: absolute;
+  top: 39px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  border: 1px solid var(--black);
+}
+
+.footer-geo {
+  position: absolute;
+  top: 79px;
+  right: 0;
+  font-variant-numeric: lining-nums;
+  white-space: pre;
+  letter-spacing: 0.05em;
+}
+
+/* ===================================================================
+   MEDIA QUERIES
+   =================================================================== */
+
+@media (max-width: 1200px) {
+  :root {
+    --left: 120px;
+    --nav-left: 60px;
+  }
+
+  .deco-box {
+    width: 400px;
+    height: 400px;
+  }
+
+  .works-deco-box {
+    width: 500px;
+    height: 400px;
+  }
+
+  .aaa-title-container {
+    left: 0;
+  }
+
+  .aaa-meta {
+    left: 0;
+  }
+
+  .aaa-images {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --left: 60px;
+    --nav-left: 40px;
+    --content-width: calc(100% - 60px);
+  }
+
+  .section-title {
+    font-size: 72px;
+  }
+
+  .works-list li {
+    font-size: 36px;
+  }
+
+  .deco-box, .works-deco-box {
+    display: none;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .aaa-title-container {
+    width: 100%;
+    left: 0;
+  }
+
+  .aaa-meta {
+    width: 100%;
+    left: 0;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .aaa-images {
+    margin-left: 0;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --left: 24px;
+    --nav-left: 24px;
+  }
+
+  header {
+    top: 30px;
+    height: auto;
+  }
+
+  .nav-links {
+    gap: 24px;
+  }
+
+  main {
+    padding-top: 100px;
+  }
+
+  .section-title {
+    font-size: 56px;
+  }
+
+  .works-list li {
+    font-size: 28px;
+  }
+
+  .hey-text, .contact-text, .about-bio {
+    font-size: 18px;
+  }
+
+  footer {
+    height: auto;
+    padding-bottom: 40px;
+  }
+
+  .footer-geo {
+    position: static;
+    display: block;
+    margin-top: 20px;
+  }
+
+  .footer-rule {
+    position: static;
+    display: block;
+    margin-top: 39px;
+  }
+
+  .footer-links {
+    position: static;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    margin-right: 20px;
+  }
+}

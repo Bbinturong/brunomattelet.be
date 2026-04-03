@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruno Studio • Be</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Syne', sans-serif;
+      min-width: 1440px;
+    }
+
+    a {
+      color: inherit;
+      cursor: pointer;
+    }
+
+    /* =============================================
+       NAV — fixed, 1200px centered in viewport
+    ============================================= */
+    .nav {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1200px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 1.6px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 101px;
+    }
+
+    .nav-links a {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.8px;
+      text-decoration: none;
+    }
+
+    /* =============================================
+       PAGE — 1440px canvas, all children absolute
+    ============================================= */
+    .page {
+      position: relative;
+      width: 1440px;
+      margin: 0 auto;
+      min-height: 2300px;
+    }
+
+    /* =============================================
+       OUTLINE HEADING — simulates Faction Personal Outline
+    ============================================= */
+    .outline-heading {
+      font-weight: 800;
+      font-size: 96px;
+      text-transform: uppercase;
+      -webkit-text-stroke: 2px #000000;
+      color: transparent;
+      line-height: 1;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    /* Bordered image / portrait placeholder */
+    .hero-box {
+      position: absolute;
+      top: 120px;
+      left: 445px;
+      width: 550px;
+      height: 550px;
+      border: 1px solid #000000;
+    }
+
+    /* "HEY," heading */
+    .hero-heading {
+      position: absolute;
+      top: 180px;
+      left: 240px;
+    }
+
+    /* Intro paragraph block */
+    .hero-text {
+      position: absolute;
+      top: 330px;
+      left: 240px;
+      width: 760px;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 36px;
+      letter-spacing: 1.2px;
+      white-space: pre-wrap;
+    }
+
+    .hero-text p + p {
+      margin-top: 0;
+    }
+
+    .hero-text a {
+      text-decoration: underline;
+      text-decoration-skip-ink: none;
+    }
+
+    /* =============================================
+       WORKS
+    ============================================= */
+    .works-heading {
+      position: absolute;
+      top: 760px;
+      left: 240px;
+    }
+
+    .project {
+      position: absolute;
+      left: 240px;
+      font-weight: 800;
+      font-size: 48px;
+      letter-spacing: 2.4px;
+      line-height: normal;
+      white-space: nowrap;
+    }
+
+    /* =============================================
+       CONTACT
+    ============================================= */
+    .contact-heading {
+      position: absolute;
+      top: 1596px;
+      left: 240px;
+    }
+
+    .contact-text {
+      position: absolute;
+      top: 1755px;
+      left: 240px;
+      width: 760px;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 36px;
+      letter-spacing: 1.2px;
+    }
+
+    .contact-text .cta {
+      display: block;
+      margin-top: 36px;
+      text-decoration: underline;
+      text-decoration-skip-ink: none;
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    .footer {
+      position: absolute;
+      top: 2152px;
+      left: 240px;
+      width: 960px;
+      height: 98px;
+    }
+
+    .footer-social {
+      position: absolute;
+      top: 0;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.8px;
+      white-space: nowrap;
+      text-decoration: none;
+      font-feature-settings: 'lnum' 1, 'pnum' 1;
+    }
+
+    .footer-social.twitter   { left: 0; }
+    .footer-social.instagram { left: 12.4%; }
+    .footer-social.spotify   { left: 27.81%; }
+    .footer-social.linkedin  { left: 40.31%; }
+
+    .footer-line {
+      position: absolute;
+      top: 39px;
+      left: 0;
+      right: 0;
+      height: 0;
+      border-top: 1px solid #000000;
+    }
+
+    .footer-coords {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.8px;
+      white-space: pre;
+      font-feature-settings: 'lnum' 1, 'pnum' 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────── -->
+  <nav class="nav">
+    <a class="nav-logo" href="#">brunostudio•be</a>
+    <div class="nav-links">
+      <a href="#">about</a>
+      <a href="#">works</a>
+      <a href="#">contact</a>
+    </div>
+  </nav>
+
+  <!-- ── Page canvas ─────────────────────────────── -->
+  <div class="page">
+
+    <!-- Hero -->
+    <div class="hero-box"></div>
+    <h1 class="outline-heading hero-heading">hey,</h1>
+    <div class="hero-text">
+      <p>I'm Bruno, a.k.a. <a href="#">@bbinturong,</a>&nbsp; belgian designer specialized in user experience and user interface</p>
+      <p>&nbsp;</p>
+      <p>Actually based in Brussels and looking for new opportunities</p>
+    </div>
+
+    <!-- Works -->
+    <h2 class="outline-heading works-heading">works</h2>
+    <p class="project" style="top: 910px;">Adopt an Animal</p>
+    <p class="project" style="top: 1008px;">Lacrosse</p>
+    <p class="project" style="top: 1106px;">Bsit</p>
+    <p class="project" style="top: 1204px;">Parentalist</p>
+    <p class="project" style="top: 1302px;">Bsit DSM</p>
+
+    <!-- Contact -->
+    <h2 class="outline-heading contact-heading">contact</h2>
+    <div class="contact-text">
+      <p>Wanna discuss about a future project, some misspelling I did or anything else. Let's get in touch and grab a coffee.&nbsp;</p>
+      <p>No sugar, no milk. ty</p>
+      <a href="#" class="cta">Let's discuss</a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <a class="footer-social twitter"   href="#">twitter</a>
+      <a class="footer-social instagram" href="#">instagram</a>
+      <a class="footer-social spotify"   href="#">spotify</a>
+      <a class="footer-social linkedin"  href="#">linkedin</a>
+      <div class="footer-line"></div>
+      <p class="footer-coords">50° 38' 52.5" N   •  5° 34' 39.9" E</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

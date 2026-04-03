@@ -1,0 +1,841 @@
+/* IMPORT */
+/* social */
+.slide {
+  transform: translateX(-40%);
+  transition: all ease .5s;
+}
+
+.slider {
+  transform: translateX(0);
+  transition: all ease .5s;
+}
+
+/* FONT */
+@font-face {
+  font-family: 'faction';
+  src: url("font/faction.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syne';
+  src: url("font/Syne-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syne-semi';
+  src: url("font/Syne-SemiBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syne-bold';
+  src: url("font/Syne-ExtraBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'bodoni';
+  src: url("font/bodoni.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* GENERAL */
+::-moz-selection {
+  color: #f3f3f3;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+::selection {
+  color: #f3f3f3;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* GENERAL */
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  background-color: white;
+  color: #030303;
+  font-size: 24px;
+  font-family: Syne;
+  font-style: normal;
+  letter-spacing: 0.06em;
+}
+
+body p {
+  font-size: 24px;
+  line-height: 150%;
+}
+
+header {
+  width: 100%;
+    font-size: 16.66667px;
+    position: fixed;
+    height: 20px;
+    max-width: 1200px;
+    top: 60px;
+}
+
+header .logo {
+  position: absolute;
+    top: 0;
+    left: 0;
+}
+
+header nav {
+  position: absolute;
+    top: 0;
+    right: 0;
+  z-index: 9999;
+}
+
+header nav .main_nav {
+  width: auto;
+}
+
+header nav .main_nav li {
+  float: left;
+  margin: 0 20px;
+}
+
+.link-nav li a {
+  text-transform: lowercase;
+  position: relative;
+  z-index: 10;
+}
+/*.link-nav li a:after {
+  content: '';
+  width: calc( 100% - 4px);
+  left: 2px;
+  height: calc( 100% - 6px);
+  bottom: 0px;
+  z-index: -1;
+  position: absolute;
+  transition: ease .2s;
+}
+
+.link-nav li a:hover:after {
+  width: calc( 100% + 4px);
+  left: -2px;
+  height: calc( 100% + 4px);
+  bottom: -2px;
+  transition: ease .2s;
+}
+*/
+
+.link-nav li a:before {
+  content: '';
+  width: 100%;
+  height: 2px;
+  z-index: -10;
+  position: absolute;
+  bottom: -2px;
+  left: 0px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  transition: ease .2s;
+}
+
+.link-nav li a:hover:before {
+
+  border: 2px solid black;
+  width: calc( 100% + 12px);
+  left: -6px;
+  height: calc( 100% + 12px);
+  bottom: -6px;
+  transition: ease .2s;
+}
+
+
+
+
+
+
+
+
+
+/* TO DELETE */
+@keyframes hoverLink2 {
+  0% {
+    width: 100%;
+  }
+  100% {
+    height: 100%;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+  }
+}
+
+@keyframes hoverLink {
+  0% {
+    width: 100%;
+  }
+  50% {
+    height: calc( 100% + 4px);
+    bottom: -2px;
+    width: 100%;
+    left: 0;
+  }
+  100% {
+    width: calc( 100% + 4px);
+    left: -2px;
+    height: calc( 100% + 4px);
+    bottom: -2px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.big-title {
+
+  font-family: faction;
+  font-size: 96px;
+  margin-bottom: 60px;
+}
+
+.main-section {
+  margin: 180px 80px;
+}
+
+
+
+.squared {
+  height: 80vh;
+  width: 80vh;
+  max-width: 500px;
+  max-height: 500px;
+  border: 2px solid black;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -99999;
+}
+
+.squared .text-baseline {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+}
+
+.squared .text-baseline p {
+  text-transform: uppercase;
+  position: absolute;
+  font-size: 12px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: .5s;
+}
+
+.squared .text-baseline p.text-baseline-appear {
+  opacity: 100%;
+  transform: translateY(0px);
+  transition: .5s;
+}
+
+.squared .img {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.squared .img img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.main-section p {
+  margin: 40px 0;
+  max-width: 760px;
+  position: relative;
+}
+
+a {
+  position: relative;
+}
+
+.inline-link{
+  display: inline-block;
+  position: relative;
+}
+
+.inline-link:before {
+  content: '';
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  background-color: black;
+  transition: ease .2s;
+}
+
+.inline-link:hover:before {
+  width: 2px;
+  left: calc(50% - 1px);
+  transition: ease .2s;
+}
+
+#works .works-list {
+  font-family: syne-bold;
+  font-size: 71.66362px;
+}
+
+#works .works-list .works-links {
+  margin: 40px 0;
+}
+
+/* CURSORS */
+.cursor-satelite {
+  display: inline-block;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>📡</text></svg>") 16 0,auto; /*!emojicursor.app*/
+}
+.cursor-bear {
+  display: inline-block;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🧸</text></svg>") 16 0,auto; /*!emojicursor.app*/
+}
+.cursor-external {
+  display: inline-block;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>↗️</text></svg>") 16 0,auto; /*!emojicursor.app*/
+}
+.cursor-tiger {
+  display: inline-block;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🐅</text></svg>") 16 0,auto; /*!emojicursor.app*/
+}
+.cursor-lacrosse {
+  display: inline-block;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🥍</text></svg>") 16 0,auto; /*!emojicursor.app*/
+}
+.cursor-beer {
+
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🍺</text></svg>") 16 0,auto; /*!emojicursor.app*/
+
+}
+.cursor-ballon {
+
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🎈</text></svg>") 16 0,auto; /*!emojicursor.app*/
+
+}
+.cursor-network {
+
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>☎️</text></svg>") 16 0,auto; /*!emojicursor.app*/
+
+}
+.cursor-chat {
+
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>💌</text></svg>") 16 0,auto; /*!emojicursor.app*/
+
+}
+
+
+
+
+.contact-section p {
+  margin: 40px 0;
+  max-width: 760px;
+}
+
+
+footer {
+  width: 100%;
+  height: 20px;
+  border: 2px solid black;
+  box-sizing: border-box;
+  font-size: 16.66667px;
+  position: relative;
+  margin: 60px 0;
+}
+
+footer .social-list {
+  line-height: 20px;
+  position: absolute;
+  left: 0;
+  top: -30px;
+}
+
+footer .social-list li {
+
+  float: left;
+  margin-right: 40px;
+}
+
+footer .geo {
+  line-height: 20px;
+  position: absolute;
+  right: 0;
+  bottom: -30px;
+  font-variant-numeric: lining-nums;
+}
+
+
+/* ABOUT */
+
+.click-game{
+
+  display: block;
+  border: 2px solid black;
+  height: 600px;
+  width: 100%;
+
+  position: relative;
+}
+
+.click-game img {
+
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: -999;
+}
+
+.click-game:after {
+
+  content:'click to see me';
+  font-size: 12px;
+  color: white;
+  text-align: center;
+
+  display: block;
+  padding: 20px;
+  max-width: 60px;
+  border-radius: 30px;
+  background-color: black;
+
+  position: absolute;
+  top: calc(50% - 32px);
+  right: calc(50% - 50px);
+ animation: rotating 42s infinite linear;
+/*box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+*/}
+
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+/* ABOUT */
+
+.skill-title {
+
+  font-family: syne-semi;
+  font-size: 16px;
+  font-weight: 500;
+  color: #BBB8BF;
+  line-height: 50px;
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.skill-title:after {
+
+  content:'';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+
+}
+
+.skills-wrapper {
+  margin-top: 40px;
+}
+
+.skills-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 160px;
+}
+
+.skills-row:first-child {
+
+  margin-bottom: 60px;
+
+}
+
+.skills-col {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.skill-list .skill-item {
+
+  font-size: 24px;
+  letter-spacing: 5%;
+  line-height: 30px;
+  margin: 20px 0;
+  font-family: syne-semi;
+
+}
+
+.resume-list h2 {
+
+  font-family: syne-bold;
+  font-size: 34px;
+}
+.resume-list h4 {
+
+  font-family: syne-semi;
+  font-size: 14px;
+  color: grey;
+  margin-bottom: 12px;
+}
+
+
+.resume-list p {
+
+  font-family: syne-semi;
+  font-size: 16px;
+  width: 600px;
+  margin-bottom: 0;
+}
+
+.resume-item {
+
+  padding-bottom: 80px;
+  border-left: 2px solid black;
+  padding: 40px 20px;
+  margin-bottom: 40px;
+}
+
+.test {
+
+  position: relative;
+}
+.resume-decoration-parent {
+
+  position: absolute;
+  height: 100%;
+  right: 0;
+  top: 0;
+}
+
+.resume-decoration {
+
+  position: sticky;
+  height: 480px;
+  width: 480px;
+  right: 0;
+  top: 200px;
+  border: 2px solid black;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* MEDIA QUERIES START                             */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  body {
+    position: relative;
+    margin: 0 60px;
+    font-size: 20px;
+  }
+   header {
+    width: 80%;
+    left: 10%;
+  }
+
+}
+
+
+/* Tablet Portrait & Small Laptops (max-width: 992px) */
+@media (max-width: 992px) {
+  body {
+    position: relative;
+    margin: 0 60px;
+    font-size: 20px;
+  }
+
+  body p {
+    font-size: 20px;
+  }
+
+  header {
+    width: 80%;
+    left: 10%;
+  }
+
+  header .logo {
+    left: 0;
+  }
+
+  header nav {
+    right: 0;
+  }
+
+  header nav .main_nav {
+    gap: 15px;
+  }
+
+  .big-title {
+    font-size: 72px;
+  }
+
+  .main-section {
+    margin: 120px 40px;
+  }
+
+  .squared {
+    max-width: 400px;
+    max-height: 400px;
+  }
+
+  #works .works-list {
+    font-size: 50px;
+  }
+
+  .resume-list p {
+    width: auto; /* Allow text to wrap naturally */
+    max-width: 500px; /* Cap width for readability */
+  }
+
+  .skills-row {
+    gap: 80px; /* Reduce gap */
+  }
+
+  .resume-decoration {
+    height: 350px;
+    width: 350px;
+    top: 150px;
+  }
+
+  footer .social-list li {
+    margin-right: 20px;
+  }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+  body {
+    margin: 0 20px; /* Smaller margins for mobile */
+    font-size: 18px;
+  }
+
+  body p {
+    font-size: 18px;
+  }
+
+  header {
+    width: 100%;
+    padding-top: 40px; /* Reduce header padding */
+    position: static; /* Remove fixed position for header on mobile */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  header .logo {
+    position: static; /* Remove absolute positioning */
+    top: auto;
+    left: auto;
+    margin-bottom: 20px; /* Space between logo and nav */
+  }
+
+  header nav {
+    position: static; /* Remove absolute positioning */
+    right: auto;
+    top: auto;
+  }
+
+  header nav .main_nav {
+    flex-direction: column; /* Stack nav items vertically */
+    align-items: center;
+    gap: 10px; /* Smaller gap */
+  }
+
+  .big-title {
+    font-size: 68px; /* Significantly smaller title */
+    margin-bottom: 30px;
+  }
+
+  .main-section {
+    margin: 80px 0; /* Adjust margins */
+    padding: 0 10px; /* Add some internal padding */
+  }
+
+  .squared {
+    
+   position: fixed;
+        height: calc(100% - 120px);
+        width: calc(100% - 120px);
+        margin: 60px;
+        max-width: none;
+        max-height: none;
+  }
+
+  .main-section p {
+    margin: 20px 0;
+    max-width: 100%; /* Allow paragraphs to take full width */
+  }
+
+  #works .works-list {
+    font-size: 36px; /* Smaller work titles */
+  }
+
+  #works .works-list .works-links {
+    margin: 20px 0;
+  }
+
+  .contact-section p {
+    margin: 20px 0;
+    max-width: 100%;
+  }
+
+  footer {
+    flex-direction: column; /* Stack footer elements vertically */
+    height: auto;
+    padding: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  footer .social-list {
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+
+  footer .geo {
+    margin-top: 10px;
+  }
+
+  .click-game {
+    height: 300px; /* Smaller height for game */
+  }
+
+  .click-game:after {
+    padding: 10px;
+    max-width: 50px;
+    font-size: 10px;
+  }
+
+  .skills-row {
+    flex-direction: column; /* Stack skills columns */
+    gap: 40px;
+  }
+
+  .skills-row:first-child {
+    margin-bottom: 40px;
+  }
+
+  .skill-list .skill-item {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+
+  .resume-list h2 {
+    font-size: 28px;
+  }
+
+  .resume-list h4 {
+    font-size: 12px;
+  }
+
+  .resume-list p {
+    font-size: 14px;
+    width: auto;
+  }
+
+  .resume-item {
+    padding: 20px 10px;
+    margin-bottom: 20px;
+  }
+
+  .resume-decoration-parent {
+    position: static; /* Remove absolute positioning */
+    height: auto;
+  }
+
+  .resume-decoration {
+    position: static; /* Remove sticky positioning */
+    height: 200px;
+    width: 100%;
+    margin-top: 40px; /* Add space above it */
+  }
+}
+
+/* Small Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+  .big-title {
+    font-size: 48px;
+  }
+
+  #works .works-list {
+    font-size: 28px;
+  }
+
+  .click-game {
+    height: 200px;
+  }
+
+  .resume-list h2 {
+    font-size: 24px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* MEDIA QUERIES END                             */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

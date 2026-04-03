@@ -1,0 +1,37 @@
+@mixin center-mainContainer($x, $y) {
+  -webkit-transform: translate($x, $y);
+     -moz-transform: translate($x, $y);
+      -ms-transform: translate($x, $y);
+          transform: translate($x, $y);
+}
+
+@mixin moveY-sectionTitle($y, $s) {
+  -webkit-transform: translateY($y)scale($s);
+     -moz-transform: translateY($y)scale($s);
+      -ms-transform: translateY($y)scale($s);
+          transform: translateY($y)scale($s);
+}
+
+@mixin moveY($y) {
+  -webkit-transform: translateY($y);
+     -moz-transform: translateY($y);
+      -ms-transform: translateY($y);
+          transform: translateY($y);
+}
+
+@mixin rotate-footer($percent) {
+  -webkit-transform: translateX(100%)rotate($percent);
+     -moz-transform: translateX(100%)rotate($percent);
+      -ms-transform: translateX(100%)rotate($percent);
+          transform: translateX(100%)rotate($percent);
+}
+
+@mixin transition($el, $time) {
+  -webkit-transition: $el $time ease-out;
+     -moz-transition: $el $time ease-out;
+      -ms-transition: $el $time ease-out;
+          transition: $el $time ease-out;
+}
+
+
+

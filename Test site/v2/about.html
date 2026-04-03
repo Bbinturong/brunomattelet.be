@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style/style.css">
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <title>about — bruno • studio</title>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="nav-logo">bruno • studio</a>
+    <nav class="nav-links">
+      <a href="about.html" class="active">about</a>
+      <a href="works.html">works</a>
+      <a href="index.html#contact">contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ABOUT -->
+    <section class="about-section">
+      <h1 class="section-title">about</h1>
+
+      <div class="about-bio">
+        <p>Hey, you can call me Bruno or <a href="https://www.instagram.com/bbinturong" target="_blank" style="text-decoration:underline;text-underline-offset:3px;">@bbinturong,</a> that's me! Born and raised in Liège, I moved in Brussels in order to live my best life.</p>
+      </div>
+
+      <div class="about-image-box" id="clickGame">
+        <img id="clickGameImg" src="" alt="Bruno">
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="skills-section">
+      <h2 class="section-title">skills</h2>
+
+      <div class="skills-grid">
+
+        <div class="skill-col">
+          <h3>Design research</h3>
+          <ul>
+            <li>Personas</li>
+            <li>Wireframe sketching</li>
+            <li>Speedy prototyping</li>
+            <li>User testing</li>
+            <li>Workshop facilitator</li>
+            <li>Empathy</li>
+          </ul>
+        </div>
+
+        <div class="skill-col">
+          <h3>Product design</h3>
+          <ul>
+            <li>User experience</li>
+            <li>User interface</li>
+            <li>Micro-interaction</li>
+            <li>Copywriting</li>
+            <li>Minimalist animation</li>
+            <li>Front-end development</li>
+            <li>Responsive web design</li>
+          </ul>
+        </div>
+
+        <div class="skill-col">
+          <h3>Graphic design</h3>
+          <ul>
+            <li>Design systems</li>
+            <li>Logotypes</li>
+            <li>Iconography</li>
+            <li>Typography</li>
+            <li>Storytelling</li>
+            <li>Colors</li>
+          </ul>
+        </div>
+
+        <div class="skill-col">
+          <h3>Other powers</h3>
+          <ul>
+            <li>Lacrosse</li>
+            <li>Smoothie</li>
+            <li>Tattooing</li>
+            <li>Carbonara</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RESUME -->
+    <section class="resume-section">
+      <h2 class="section-title">resume</h2>
+
+      <ul class="resume-list">
+
+        <li class="resume-item">
+          <h4>2022 — Present</h4>
+          <h2>Bsit technologies</h2>
+          <p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the development of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+        </li>
+
+        <li class="resume-item">
+          <h4>2021 — 2022</h4>
+          <h2>UX Training</h2>
+          <p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the development of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+        </li>
+
+        <li class="resume-item">
+          <h4>2019 — 2021</h4>
+          <h2>KIKK Festival</h2>
+          <p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the development of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+        </li>
+
+        <li class="resume-item">
+          <h4>2018 — 2019</h4>
+          <h2>DWM</h2>
+          <p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the development of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+        </li>
+
+        <li class="resume-item">
+          <h4>2014 — 2018</h4>
+          <h2>HEAJ</h2>
+          <p>Where everything else led. Got the basics of graphic design, development, most experiences with Adobe Creative Suite, web design and storytelling.</p>
+        </li>
+
+      </ul>
+    </section>
+
+    <footer>
+      <div class="footer-links">
+        <a href="https://twitter.com" target="_blank">twitter</a>
+        <a href="https://instagram.com/bbinturong" target="_blank">instagram</a>
+        <a href="https://open.spotify.com" target="_blank">spotify</a>
+        <a href="https://linkedin.com" target="_blank">linkedin</a>
+      </div>
+      <div class="footer-rule"></div>
+      <span class="footer-geo">50° 38' 52.5" N &nbsp;&nbsp;•&nbsp; 5° 34' 39.9" E</span>
+    </footer>
+
+  </main>
+
+  <script>
+    const game = document.getElementById('clickGame');
+    const img = document.getElementById('clickGameImg');
+    let prev = null;
+
+    game.addEventListener('click', () => {
+      let n;
+      do { n = Math.floor(Math.random() * 29) + 1; } while (n === prev);
+      prev = n;
+      img.style.opacity = '1';
+      img.src = '../assets/images/me/' + n + '.jpg';
+      setTimeout(() => { img.style.opacity = '0'; }, 1200);
+    });
+  </script>
+
+</body>
+</html>

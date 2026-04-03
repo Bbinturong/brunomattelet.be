@@ -1,0 +1,31 @@
+// FONT SIZE
+$typescale:1.44;
+$font:24px;
+$font1: $font * $typescale;
+$font2: $font1 * $typescale;
+$font3: $font2 * $typescale;
+$font4: $font3 * $typescale;
+$font5: $font4 * $typescale;
+$font6: $font5 * $typescale;
+$font7: $font6 * $typescale;
+$font8: $font7 * $typescale;
+
+
+$font-1: ($font / $typescale);
+$font-2: ($font-1 / $typescale);
+
+// WEIGHT
+
+
+// COLOR
+$black: #2B2B2B;
+$myColor: rgba(47%, 46%, 91%, .5);
+
+/* social */
+$spotify : #17D662;
+$facebook: #4367B0;
+$twitter: #06A7DF;
+$insta: #E86E66;
+
+
+

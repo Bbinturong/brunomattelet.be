@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Ensures proper rendering and touch zooming on all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- It's good practice to load reset/normalize CSS first -->
+    <link rel="stylesheet" type="text/css" href="assets/style/reset.css">
+    <link rel="stylesheet" type="text/css" href="assets/style/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+
+    <title>brn • mttlt</title>
+    <style>
+        /* Styles for the new Interactive Counter feature */
+        .interactive-counter {
+            position: relative; /* Required for positioning the animation */
+            cursor: pointer;
+            user-select: none; /* Prevents text selection on rapid clicks */
+            font-size: 24px;
+            margin: 40px 0;
+            display: block;
+        }
+        .counter-label {
+            font-family: 'syne-bold', sans-serif; /* Make the label bold */
+        }
+        .counter-value {
+            /* This is the key property to ensure numbers stay aligned */
+            font-variant-numeric: tabular-nums;
+            font-weight: normal;
+        }
+        .plus-one-animation {
+            position: absolute;
+            top: -10px; /* Initial position above the text */
+            left: 50px; /* Position horizontally */
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            color: #28a745; /* Green color for the +1 */
+            font-weight: bold;
+            /* The animation itself */
+            animation: fade-up 800ms ease-out forwards;
+            pointer-events: none; /* Prevents the animation from interfering with clicks */
+        }
+
+        /* The animation keyframes */
+        @keyframes fade-up {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50px); /* Moves up by 50px while fading out */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- The <header> element contains introductory content or a set of navigational links. -->
+    <header>
+        <h1 class='logo'><a href="index.html">brn • std</a></h1>
+        <nav>
+            <ul class="main_nav link-nav">
+                <li><a href="about.html">abt</a></li>
+                <li><a href="work.html">wrk</a></li>
+                <li><a href="contact.html">cntct</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- This is the central visual element, which will now adapt across screen sizes -->
+    <div class='squared'>
+        <div class='text-baseline'>
+            <p class='proximus-baseline'>Mobile app • 2023 • Case study</p>
+            <p class='culturius-baseline'>Responsive website • 2022</p>
+            <p class='bsit-baseline'>Mobile app • 2020</p>
+            <p class='aaa-baseline'>Web experiment • 2016 • Case study</p>
+            <p class='lax-baseline'>Web documentary • 2015 • Case study</p>
+        </div>
+        <div class='img'>
+            <!-- Alt text is crucial for accessibility -->
+            <img id="img" src="" alt="Dynamically loaded project preview">
+        </div>
+    </div>
+
+    <!-- The <main> tag specifies the main content of a document. -->
+    <main>
+        <section class="main-section" id='intro'>
+            <h2 class="big-title">Hey,</h2>
+            <!-- This is the new interactive element, now connected to Firebase -->
+            <p class="interactive-counter" id="wireframeCounter">
+                <span class="counter-label">Wireframe</span>
+                <span class="counter-value-container">
+                    (<span class="counter-value">0</span>)
+                </span>
+            </p>
+            <p>I’m <span class='me inline-link cursor-beer'>Bruno</span>, belgian designer specialized in functional user experience and minimalist user interface.</p>
+            <p>Actually based in Brussels and working with <a class='link-movify cursor-ballon inline-link' target="_blank" href="https://www.movify.com//">Movify</a> at <a class='cursor-satelite inline-link' target="_blank" href="https://www.proximus.com/">Proximus</a>.</p>
+        </section>
+
+        <section class="main-section" id='works'>
+            <h1 class="big-title">Works</h1>
+            <ul class='works-list'>
+                <li class='works-links'><a class='cursor-satelite link-proximus' href="https://parentalist.com/" target="_blank">Proximus +</a></li>
+                <li class='works-links'><a class='cursor-external link-culturius' href="https://bsit.com/en/parent" target="_blank">Culturius</a></li>
+                <li class='works-links'><a class='cursor-bear link-bsit' href="http://brunomattelet.be/aaa/" target="_blank">Bsit</a></li>
+                <li class='works-links'><a class='cursor-tiger link-aaa' href="#" target="_blank">Adopt An Animal</a></li>
+                <li class='works-links'><a class='cursor-lacrosse link-lax' href="#" target="_blank">Lacrosse</a></li>
+            </ul>
+        </section>
+
+        <section class="main-section contact-section" id='contact'>
+            <h1 class="big-title">Contact</h1>
+            <p>Wanna discuss a future project, some misspelling I did or anything else?</p>
+            <p>Drop me a note and let's grab a beer.</p>
+            <p><a class="cursor-chat link-chat inline-link" href="#">Let’s discuss</a></p>
+        </section>
+    </main>
+
+    <!-- The <footer> element defines a footer for a document or section. -->
+    <footer>
+        <ul class="social-list">
+            <li><a target="_blank" href="https://open.spotify.com/">sptf</a></li>
+            <li><a target="_blank" href="https://www.instagram.com/">nstgrm</a></li>
+            <li><a target="_blank" href="https://www.facebook.com/">fcbck</a></li>
+            <li><a target="_blank" href="https://x.com/">x</a></li>
+        </ul>
+        <span class='geo'>50°50'26.1"N 4°23'32.9"E</span>
+    </footer>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Firebase Initialization ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // --- Authentication State Observer ---
+        // This is the core fix: The app logic runs only AFTER authentication is confirmed.
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, now we can safely run the app logic.
+                initializeAppLogic();
+            }
+        });
+
+        // --- Trigger Authentication ---
+        // This part remains the same, it just starts the sign-in process.
+        (async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+        })();
+        
+        // --- Main Application Logic ---
+        // All the interactive code is now wrapped in this function.
+        function initializeAppLogic() {
+            // Cache DOM elements for better performance
+            const imgElement = document.getElementById("img");
+            
+            // State variables for image logic
+            let changingImage = null;
+            let previousImage = null;
+
+            const getRandomImageIndex = (max, previous) => {
+                let index;
+                do {
+                    index = Math.floor(Math.random() * max) + 1;
+                } while (index === previous);
+                return index;
+            };
+            
+            const changeImg = (folder, maxImages = 29) => {
+                clearInterval(changingImage);
+                const imageName = getRandomImageIndex(maxImages, previousImage);
+                imgElement.src = `assets/images/${folder}/${imageName}.jpg`;
+                previousImage = imageName;
+                changingImage = setInterval(() => changeImg(folder, maxImages), 80);
+            };
+
+            const clearImage = () => {
+                clearInterval(changingImage);
+                imgElement.src = "";
+            };
+
+            const unsplashImg = (collection, totalImages = 3) => {
+                clearInterval(changingImage);
+                const unsplashAPIKey = "mzADxqRYqLD-mI6NOWgcK8t6Md9g2T_yS_3plCfpuxc";
+                const url = `https://api.unsplash.com/photos/random?count=${totalImages}&client_id=${unsplashAPIKey}&collection=${collection}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const index = getRandomImageIndex(totalImages, previousImage) - 1;
+                        const imageUrl = data[index]?.urls?.regular;
+                        if (imageUrl) {
+                            imgElement.src = imageUrl;
+                            previousImage = index;
+                        }
+                    })
+                    .catch(error => console.error("Unsplash API error:", error));
+            };
+
+            const clearUnsplashImg = () => {
+                clearInterval(changingImage);
+                imgElement.src = "";
+            };
+
+            const bindHover = (linkSelector, baselineSelector, onEnter, onLeave) => {
+                const link = document.querySelector(linkSelector);
+                const baseline = baselineSelector ? document.querySelector(baselineSelector) : null;
+
+                if (link) {
+                    link.addEventListener("mouseenter", () => {
+                        if (baseline) baseline.classList.add("text-baseline-appear");
+                        if (onEnter) onEnter();
+                    });
+                    link.addEventListener("mouseleave", () => {
+                        if (baseline) baseline.classList.remove("text-baseline-appear");
+                        if (onLeave) onLeave();
+                    });
+                }
+            };
+
+            const standardProjects = [
+                { link: ".link-proximus", baseline: ".proximus-baseline" },
+                { link: ".link-culturius", baseline: ".culturius-baseline" },
+                { link: ".link-aaa", baseline: ".aaa-baseline" },
+                { link: ".link-lax", baseline: ".lax-baseline" },
+            ];
+
+            standardProjects.forEach(({ link, baseline }) => {
+                bindHover(link, baseline, () => changeImg("me"), clearImage);
+            });
+            bindHover(".link-bsit", ".bsit-baseline", () => unsplashImg("Culture"), clearUnsplashImg);
+            bindHover(".me", null, () => changeImg("me"), clearImage);
+
+            // --- Interactive Counter Logic with Firebase ---
+            const wireframeCounterElement = document.getElementById("wireframeCounter");
+            if (wireframeCounterElement) {
+                const valueElement = wireframeCounterElement.querySelector(".counter-value");
+                const counterId = "wireframe_likes";
+                const counterRef = doc(db, "artifacts", appId, "public/data/counters", counterId);
+
+                onSnapshot(counterRef, (docSnap) => {
+                    if (docSnap.exists() && docSnap.data().count) {
+                        valueElement.textContent = docSnap.data().count;
+                    } else {
+                        valueElement.textContent = 0;
+                    }
+                });
+
+                wireframeCounterElement.addEventListener("click", async () => {
+                    try {
+                        await runTransaction(db, async (transaction) => {
+                            const counterDoc = await transaction.get(counterRef);
+                            let newCount = 1;
+                            if (counterDoc.exists()) {
+                                newCount = (counterDoc.data().count || 0) + 1;
+                            }
+                            transaction.set(counterRef, { count: newCount, lastUpdated: serverTimestamp() }, { merge: true });
+                        });
+
+                        const plusOne = document.createElement("span");
+                        plusOne.textContent = "+1";
+                        plusOne.className = "plus-one-animation";
+                        wireframeCounterElement.appendChild(plusOne);
+
+                        setTimeout(() => {
+                            plusOne.remove();
+                        }, 800);
+
+                    } catch (e) {
+                        console.error("Transaction failed: ", e);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

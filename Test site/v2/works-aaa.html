@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style/style.css">
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <title>Adopt an Animal — bruno • studio</title>
+  <style>
+    /* Slot-machine title effect */
+    .aaa-title-container {
+      position: relative;
+      width: 960px;
+      height: 600px;
+      border: 1px solid #000;
+      margin-left: var(--left, 240px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .aaa-title-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .aaa-title-item {
+      font-family: 'syne-bold', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      line-height: 98px;
+      text-align: center;
+      width: 100%;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 0.12);
+      user-select: none;
+    }
+
+    .aaa-title-item.active {
+      color: #000;
+      -webkit-text-stroke: 0;
+    }
+
+    /* White mask strips that clip the ghosted text */
+    .aaa-mask {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 29px;
+      background: #fff;
+      pointer-events: none;
+    }
+
+    /* Metadata row */
+    .aaa-meta {
+      display: flex;
+      width: 960px;
+      margin-left: var(--left, 240px);
+      margin-top: 40px;
+    }
+
+    .aaa-meta-item {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      padding-bottom: 24px;
+    }
+
+    .aaa-meta-item::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 190px;
+      height: 1px;
+      background: #000;
+    }
+
+    .aaa-meta-label {
+      font-family: 'syne-semi', sans-serif;
+      font-size: 16px;
+      line-height: 36px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Content sections */
+    .aaa-content-wrap {
+      margin-left: var(--left, 240px);
+      max-width: 960px;
+      margin-top: 80px;
+    }
+
+    .aaa-content-block {
+      margin-bottom: 80px;
+    }
+
+    .aaa-content-block h2 {
+      font-family: 'syne-bold', sans-serif;
+      font-size: 34px;
+      letter-spacing: 0.05em;
+      line-height: 50px;
+      margin-bottom: 20px;
+    }
+
+    .aaa-content-block p {
+      font-family: 'syne', sans-serif;
+      font-size: 24px;
+      line-height: 36px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Two image boxes */
+    .aaa-image-pair {
+      margin-left: var(--left, 240px);
+      display: flex;
+      gap: 20px;
+      width: 960px;
+      margin-bottom: 60px;
+    }
+
+    .aaa-image-box {
+      flex: 1;
+      height: 600px;
+      border: 1px solid #000;
+    }
+
+    @media (max-width: 1200px) {
+      .aaa-title-container,
+      .aaa-meta,
+      .aaa-content-wrap,
+      .aaa-image-pair {
+        margin-left: var(--left, 120px);
+        width: auto;
+        max-width: calc(100% - var(--left, 120px) - 60px);
+      }
+
+      .aaa-image-pair {
+        flex-direction: column;
+      }
+
+      .aaa-image-box {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="nav-logo">bruno • studio</a>
+    <nav class="nav-links">
+      <a href="about.html">about</a>
+      <a href="works.html" class="active">works</a>
+      <a href="index.html#contact">contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Title slot-machine box -->
+    <div class="aaa-title-container">
+      <div class="aaa-title-stack">
+        <div class="aaa-title-item">Adopt an Animal</div>
+        <div class="aaa-title-item">Adopt an Animal</div>
+        <div class="aaa-title-item active">Adopt an Animal</div>
+        <div class="aaa-title-item">Adopt an Animal</div>
+        <div class="aaa-title-item">Adopt an Animal</div>
+      </div>
+      <!-- Mask strips to clip the ghost text above/below active -->
+      <div class="aaa-mask" style="top: 0; height: 155px;"></div>
+      <div class="aaa-mask" style="bottom: 0; height: 155px;"></div>
+    </div>
+
+    <!-- Project metadata -->
+    <div class="aaa-meta">
+      <div class="aaa-meta-item">
+        <p class="aaa-meta-label">Website</p>
+      </div>
+      <div class="aaa-meta-item">
+        <p class="aaa-meta-label">Developer, Designer</p>
+      </div>
+      <div class="aaa-meta-item">
+        <p class="aaa-meta-label">2018</p>
+      </div>
+    </div>
+
+    <!-- Content sections -->
+    <div class="aaa-content-wrap">
+
+      <div class="aaa-content-block">
+        <h2>Title</h2>
+        <p>The standard Lorem Ipsum passage, used since the 1500s</p>
+        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+        <p>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC</p>
+      </div>
+
+      <div class="aaa-content-block">
+        <h2>Title</h2>
+        <p>The standard Lorem Ipsum passage, used since the 1500s</p>
+        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+        <p>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC</p>
+      </div>
+
+    </div>
+
+    <!-- Image pair -->
+    <div class="aaa-image-pair">
+      <div class="aaa-image-box"></div>
+      <div class="aaa-image-box"></div>
+    </div>
+
+    <footer>
+      <div class="footer-links">
+        <a href="https://twitter.com" target="_blank">twitter</a>
+        <a href="https://instagram.com/bbinturong" target="_blank">instagram</a>
+        <a href="https://open.spotify.com" target="_blank">spotify</a>
+        <a href="https://linkedin.com" target="_blank">linkedin</a>
+      </div>
+      <div class="footer-rule"></div>
+      <span class="footer-geo">50° 38' 52.5" N &nbsp;&nbsp;•&nbsp; 5° 34' 39.9" E</span>
+    </footer>
+
+  </main>
+
+</body>
+</html>
