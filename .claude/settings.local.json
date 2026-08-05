@@ -6,7 +6,10 @@
       "Read(//Users/bruno/.config/**)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(curl -s \"http://localhost:8127/api/skills\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'{len\\(d\\)} skills, first: {d[0][\\\\\"name\\\\\"]}'\\)\")",
+      "Bash(curl -s -o /dev/null -w \"index.html → HTTP %{http_code}\\\\n\" \"http://localhost:8127/index.html\")"
     ]
   }
 }

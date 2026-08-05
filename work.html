@@ -1,262 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Selected work by Bruno Mattelet — Proximus, Culturius, Bsit and more.">
+	<link rel="preload" href="assets/style/font/Syne-Bold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="stylesheet" type="text/css" href="assets/style/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
 	<link rel="icon" type="image/png" href="assets/images/favicon.png" />
 
-	<script src="assets/js/jquery.js"></script>
-	<!--script src="assets/js/bundle.js"></script>
-	<!--script src="assets/js/main.js"></script-->
+	<script src="assets/js/components.js" defer></script>
+	<script src="assets/js/main.js" defer></script>
 
-	<title>abt brn mttlt</title>
+	<title>wrk brn mttlt</title>
 </head>
 <body>
 
-	<header>
-
-		<h1 class='logo'><a href="index.html">brn • mttlt</a></h1>
-		
-		<nav>
-			<ul class="main_nav link-nav">
-				<li> <a href="about.html">abt </a> </li>
-				<li> <a href="work.html">wrk </a> </li>
-				<li> <a href="contact.html">cntct </a> </li>
-			</ul>
-		</nav>
-	</header>
+	<!-- Shared page chrome; markup lives in assets/js/components.js -->
+	<site-header></site-header>
 
 
 	<div class='squared'>
-		
-		<div class='text-baseline'>
-			<p class='proximus-baseline'>Mobile app • 2023 • Case study</p>
-			<p class='culturius-baseline'>Responsive website • 2022</p>
-			<p class='bsit-baseline'>Mobile app • 2020</p>
-			<p class='aaa-baseline'>Web experiment • 2016 • Case study</p>
-			<p class='lax-baseline'>Web documenbtary • 2015 • Case study</p>
-		</div>
 
-		<div class='img'> 
-
-			<img id="img" src=" ">
-
+		<div class='img'>
+			<img id="img" alt="" width="1000" height="1000">
 		</div>
 
 	</div>
 
 
 	<section class="main-section" id='works'>
-		
-		
-	<h2 class="big-title">Work</h2>
+
+
+		<h2 class="big-title">Work</h2>
 
 		<ul class='works-list'>
-			<li class='works-links'> <a  class='cursor-satelite link-proximus' href="https://parentalist.com/" target="_blank"> Proximus + </a> </li>
-			<li class='works-links'> <a class='cursor-external link-culturius' href="https://bsit.com/en/parent" target="_blank"> Culturius </a> </li>
-			<li class='works-links'> <a class='cursor-bear link-bsit' href="http://brunomattelet.be/aaa/" target="_blank"> Bsit </a> </li>
-			<li class='works-links'> <a class='cursor-tiger link-aaa' href="" target="_blank"> Adopt An Animal </a> </li>
-			<li class='works-links'> <a class='cursor-lacrosse link-lax' href="" target="_blank"> Lacrosse </a> </li>
+			<li class='works-links'> <a class='cursor-satelite link-proximus' href="proximus.html"> Proximus + </a><span class='works-baseline proximus-baseline'>Mobile app • 2023 • Case study</span></li>
+			<li class='works-links'> <a class='cursor-external link-culturius' href="culturius.html"> Culturius </a><span class='works-baseline culturius-baseline'>Responsive website • 2022</span></li>
+			<li class='works-links'> <a class='cursor-bear link-bsit' href="bsit.html"> Bsit </a><span class='works-baseline bsit-baseline'>Mobile app • 2020</span></li>
+			<li class='works-links'> <a class='cursor-tiger link-aaa' href="aaa.html"> Adopt An Animal </a><span class='works-baseline aaa-baseline'>Web experiment • 2016 • Case study</span></li>
+			<li class='works-links'> <a class='cursor-lacrosse link-lax' href="lacrosse.html"> Lacrosse </a><span class='works-baseline lax-baseline'>Web documentary • 2015 • Case study</span></li>
 		</ul>
-		
+
 
 	</section>
 
-	<footer>
-		
-		<ul class="social-list">
-			<li><a target="_blank" href="https://culturius.com/">sptf</a></li>
-			<li><a target="_blank" href="https://culturius.com/">nstgrm</a></li>
-			<li><a target="_blank" href="https://culturius.com/">fcbck</a></li>
-			<li><a target="_blank" href="https://culturius.com/">x</a></li>
-		</ul>
-
-		<span class='geo'> 50°50'26.1"N     4°23'32.9"E</span>
-	</footer>
+	<site-footer></site-footer>
 
 </body>
-
-<script type="text/javascript">
-
-	$(document).ready(function(){
-	
-	var link1 = $( ".link-proximus" );
-	var baseline1 = $( ".proximus-baseline" );
-	var link2 = $( ".link-culturius" );
-	var baseline2 = $( ".culturius-baseline" );
-	var link3 = $( ".link-bsit" );
-	var baseline3 = $( ".bsit-baseline" );
-	var link4 = $( ".link-aaa" );
-	var baseline4 = $( ".aaa-baseline" );
-	var link5 = $( ".link-lax" );
-	var baseline5 = $( ".lax-baseline" );
-
-
-	var changingImage;
-	var imageName;
-	var previousImage;
-
-	//$('.test').clone().addClass('cloned').appendTo('.test');
-
-	function changeImg(folder){
-		
-		console.log(folder);
-		clearInterval(changingImage);
-		imageName = Math.floor(Math.random() * 29) + 1;
-		while(imageName == previousImage){imageName = Math.floor(Math.random() * 26) + 1;}
-
-		$("#img").attr("src","assets/images/"+folder+"/"+ imageName +".jpg");
-		previousImage = imageName;
-		changingImage = setInterval(changeImg, 80, folder);
-	}
-
-	function clearImage(){
-
-		$("#img").attr("src"," ");
-	  	changingImage = clearInterval(changingImage);
-	}
-
-
-	$( ".me" ).hover(
-	  function() {
-
-	  	changeImg('me'); 
-	  },
-	  function() {
-	  	clearImage();
-	  });
-	 
-
-
-	// ENTER-LEAVE LINK 1
-
-	link1.on( "mouseenter", function() {
-
-		baseline1.addClass( "text-baseline-appear" );
-	  	changeImg('me'); 
-	} );
-	link1.on( "mouseleave", function() {
-
-		baseline1.removeClass( "text-baseline-appear" );
-	  	clearImage();
-	} );
-
-	link2.on( "mouseenter", function() {
-
-		baseline2.addClass( "text-baseline-appear" );
-	  	changeImg('me'); 
-	} );
-	link2.on( "mouseleave", function() {
-
-		baseline2.removeClass( "text-baseline-appear" );
-	  	clearImage();
-	} );
-
-	
-
-	link4.on( "mouseenter", function() {
-
-		baseline4.addClass( "text-baseline-appear" );
-	  	changeImg('me'); 
-	} );
-	link4.on( "mouseleave", function() {
-
-		baseline4.removeClass( "text-baseline-appear" );
-	  	clearImage();
-	} );
-
-	link5.on( "mouseenter", function() {
-
-		baseline5.addClass( "text-baseline-appear" );
-	  	changeImg('me'); 
-	} );
-	link5.on( "mouseleave", function() {
-
-		baseline5.removeClass( "text-baseline-appear" );
-	  	clearImage();
-	} );
-
-
-	
-	
-	
-
-	// UNSPLASH
-
-
-	// WORKING LMAO
-
-	function getImages(collection){
-
-		var totalImage = 20;
-		var unsplashAPIKey = "mzADxqRYqLD-mI6NOWgcK8t6Md9g2T_yS_3plCfpuxc";
-		const requestUrl = 'https://api.unsplash.com/photos/random?client_id='+ unsplashAPIKey;
-		var pictureArray = 'https://api.unsplash.com/photos/random?count='+ totalImage +'&client_id='+ unsplashAPIKey + '&collection='+ collection + '';
-		return pictureArray;
-
-			console.log(data.results);
-			console.log(data[0].urls.regular);
-	}
-
-	getImages();
-	function unsplashImg(collection){
-
-		console.log("unsplashImg");
-		$.getJSON( pictureArray, function( data ) { 
-
-			console.log("JSON");
-			clearInterval(changingImage);
-			imageName = Math.floor(Math.random() * totalImage) + 1;
-			console.log(imageName);
-			while(imageName == previousImage){imageName = Math.floor(Math.random() * totalImage) + 1;}
-
-			$("#img").attr("src",data[imageName].urls.regular);
-			previousImage = imageName;
-			changingImage = setInterval(unsplashImg, 80);
-		});
-	}
-
-	function clearunsplashImg(){
-
-		$("#img").attr("src"," ");
-	  	changingImage = clearInterval(unsplashImg);
-	}
-	
-	link3.on( "mouseenter", function() {
-
-		baseline3.addClass( "text-baseline-appear" );
-	  	
-	  	unsplashImg('Culture'); 
-	} );
-	link3.on( "mouseleave", function() {
-
-		baseline3.removeClass( "text-baseline-appear" );
-	  	
-	  	clearunsplashImg();
-	} );
-
-
-});
-
-</script>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

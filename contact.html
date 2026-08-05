@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Contact Bruno Mattelet — drop a note, discuss a project, grab a beer in Brussels.">
+	<link rel="preload" href="assets/style/font/Syne-Bold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="stylesheet" type="text/css" href="assets/style/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
+	<link rel="icon" type="image/png" href="assets/images/favicon.png" />
+
+	<script src="assets/js/components.js" defer></script>
+	<script src="assets/js/main.js" defer></script>
+
+	<title>cntct brn mttlt</title>
+</head>
+<body>
+
+	<!-- Shared page chrome; markup lives in assets/js/components.js -->
+	<site-header></site-header>
+
+	<section class="main-section">
+
+		<h2 class="big-title">Contact</h2>
+
+		<p>Wanna discuss a future project, some misspelling I did or anything else?</p>
+
+		<p>Drop me a note and let's grab a beer.</p>
+
+		<form class="contact-form" id="contactForm">
+
+			<div class="form-field">
+				<label for="contactName">name</label>
+				<input type="text" id="contactName" name="name" required autocomplete="name">
+			</div>
+
+			<div class="form-field">
+				<label for="contactEmail">email</label>
+				<input type="email" id="contactEmail" name="email" required autocomplete="email">
+			</div>
+
+			<div class="form-field">
+				<label for="contactMessage">message</label>
+				<textarea id="contactMessage" name="message" required></textarea>
+			</div>
+
+			<!-- Honeypot: humans never see this field; anything that fills it
+			     is treated as a bot and the submit is silently dropped. -->
+			<div class="hp-field" aria-hidden="true">
+				<label for="contactWebsite">website — leave this field empty</label>
+				<input type="text" id="contactWebsite" name="website" tabindex="-1" autocomplete="off">
+			</div>
+
+			<div class="captcha" id="captcha">
+				<p class="captcha-label">Human check — pick the lacrosse stick</p>
+				<div class="captcha-options"><!-- populated by main.js --></div>
+				<p class="captcha-feedback" aria-live="polite"></p>
+			</div>
+
+			<button type="submit" class="submit-btn inline-link cursor-chat" disabled>Send it</button>
+			<p class="form-feedback" aria-live="polite"></p>
+
+		</form>
+
+	</section>
+
+	<site-footer></site-footer>
+
+</body>
+</html>

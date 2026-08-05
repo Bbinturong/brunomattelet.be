@@ -1,60 +1,63 @@
-/* IMPORT */
-/* social */
-.slide {
-  transform: translateX(-40%);
-  transition: all ease .5s;
-}
-
-.slider {
-  transform: translateX(0);
-  transition: all ease .5s;
-}
-
 /* FONT */
 @font-face {
   font-family: 'faction';
-  src: url("font/faction.otf") format("opentype");
+  src: url("font/faction.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'syne';
-  src: url("font/Syne-Bold.ttf") format("truetype");
+  src: url("font/Syne-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'syne-semi';
-  src: url("font/Syne-SemiBold.ttf") format("truetype");
+  src: url("font/Syne-SemiBold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'syne-bold';
-  src: url("font/Syne-ExtraBold.ttf") format("truetype");
+  src: url("font/Syne-ExtraBold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
-@font-face {
-  font-family: 'bodoni';
-  src: url("font/bodoni.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+/* THEME
+   Every color on the site routes through these variables so the "clr me"
+   button (main.js) can restyle the whole page by overriding them. */
+:root {
+  --bg: #ffffff;       /* page background */
+  --ink: #030303;      /* text, borders, strokes */
+  --muted: #BBB8BF;    /* secondary text: labels, dates, counters */
+  --soft: #c7c7c7;     /* decorative strokes (hero echo outlines) */
+  --accent: #28a745;   /* flourishes (+1 animation) */
 }
 
 /* GENERAL */
 ::-moz-selection {
-  color: #f3f3f3;
+  color: var(--bg);
   background-color: rgba(0, 0, 0, 0);
 }
 
 ::selection {
-  color: #f3f3f3;
+  color: var(--bg);
   background-color: rgba(0, 0, 0, 0);
+}
+
+/* Custom-element wrappers for the shared header/footer must not create
+   their own box, so the inner header/footer lay out as before. */
+site-header,
+site-footer {
+  display: contents;
 }
 
 /* GENERAL */
@@ -62,8 +65,8 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
-  background-color: white;
-  color: #030303;
+  background-color: var(--bg);
+  color: var(--ink);
   font-size: 24px;
   font-family: Syne;
   font-style: normal;
@@ -111,25 +114,49 @@ header nav .main_nav li {
   position: relative;
   z-index: 10;
 }
-/*.link-nav li a:after {
-  content: '';
-  width: calc( 100% - 4px);
-  left: 2px;
-  height: calc( 100% - 6px);
-  bottom: 0px;
-  z-index: -1;
-  position: absolute;
-  transition: ease .2s;
+
+/* "clr" switch: a two-state toggle between the colored and b&w versions */
+.color-me-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.link-nav li a:hover:after {
-  width: calc( 100% + 4px);
-  left: -2px;
-  height: calc( 100% + 4px);
-  bottom: -2px;
-  transition: ease .2s;
+.color-me-label {
+  text-transform: lowercase;
 }
-*/
+
+.color-me {
+  position: relative;
+  width: 44px;
+  height: 20px;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: background-color ease .2s;
+}
+
+.color-me-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ink);
+  transition: transform ease .2s, background-color ease .2s;
+}
+
+.color-me[aria-checked="true"] {
+  background: var(--ink);
+}
+
+.color-me[aria-checked="true"] .color-me-knob {
+  transform: translateX(24px);
+  background: var(--bg);
+}
 
 .link-nav li a:before {
   content: '';
@@ -140,13 +167,15 @@ header nav .main_nav li {
   bottom: -2px;
   left: 0px;
   box-sizing: border-box;
-  border: 1px solid black;
+  border: 1px solid var(--ink);
   transition: ease .2s;
 }
 
-.link-nav li a:hover:before {
+/* Hover, and the current page's nav item (forced-active hover state). */
+.link-nav li a:hover:before,
+.link-nav li a[aria-current="page"]:before {
 
-  border: 2px solid black;
+  border: 2px solid var(--ink);
   width: calc( 100% + 12px);
   left: -6px;
   height: calc( 100% + 12px);
@@ -157,61 +186,16 @@ header nav .main_nav li {
 
 
 
-
-
-
-
-
-/* TO DELETE */
-@keyframes hoverLink2 {
-  0% {
-    width: 100%;
-  }
-  100% {
-    height: 100%;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-  }
-}
-
-@keyframes hoverLink {
-  0% {
-    width: 100%;
-  }
-  50% {
-    height: calc( 100% + 4px);
-    bottom: -2px;
-    width: 100%;
-    left: 0;
-  }
-  100% {
-    width: calc( 100% + 4px);
-    left: -2px;
-    height: calc( 100% + 4px);
-    bottom: -2px;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .big-title {
 
   font-family: faction;
   font-size: 96px;
   margin-bottom: 60px;
+}
+
+/* Tighter gap when a subtitle sits directly under the title. */
+.big-title:has(+ .section-subtitle) {
+  margin-bottom: 16px;
 }
 
 .main-section {
@@ -225,7 +209,7 @@ header nav .main_nav li {
   width: 80vh;
   max-width: 500px;
   max-height: 500px;
-  border: 2px solid black;
+  border: 2px solid var(--ink);
   position: fixed;
   margin: auto;
   top: 0;
@@ -235,26 +219,27 @@ header nav .main_nav li {
   z-index: -99999;
 }
 
-.squared .text-baseline {
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: calc(100% + 8px);
+/* Permanent project info under each title — text styles aligned with the
+   about-page resume (.resume-list). */
+.works-info {
+  max-width: 600px;
+  margin-top: 16px;
 }
 
-.squared .text-baseline p {
+.works-meta {
+  display: block;
+  font-family: syne-semi;
+  font-size: 14px;
   text-transform: uppercase;
-  position: absolute;
-  font-size: 12px;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: .5s;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 12px;
 }
 
-.squared .text-baseline p.text-baseline-appear {
-  opacity: 100%;
-  transform: translateY(0px);
-  transition: .5s;
+.works-info p {
+  font-family: syne-semi;
+  font-size: 16px;
+  margin: 0;
 }
 
 .squared .img {
@@ -264,8 +249,17 @@ header nav .main_nav li {
 }
 
 .squared .img img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  /* The frame is only square on desktop; cover keeps the square photos
+     undistorted (cropped, not stretched) when the frame is a rectangle. */
+  object-fit: cover;
+}
+
+/* Idle state: no src until a project is hovered — hide the element so the
+   browser's broken-image glyph can't show (visible on dark palettes). */
+.squared .img img:not([src]) {
+  visibility: hidden;
 }
 
 .main-section p {
@@ -290,7 +284,7 @@ a {
   position: absolute;
   bottom: 1px;
   left: 0;
-  background-color: black;
+  background-color: var(--ink);
   transition: ease .2s;
 }
 
@@ -306,7 +300,7 @@ a {
 }
 
 #works .works-list .works-links {
-  margin: 40px 0;
+  margin: 40px 0 60px;
 }
 
 /* CURSORS */
@@ -340,11 +334,6 @@ a {
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🎈</text></svg>") 16 0,auto; /*!emojicursor.app*/
 
 }
-.cursor-network {
-
-  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>☎️</text></svg>") 16 0,auto; /*!emojicursor.app*/
-
-}
 .cursor-chat {
 
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>💌</text></svg>") 16 0,auto; /*!emojicursor.app*/
@@ -363,7 +352,7 @@ a {
 footer {
   width: 100%;
   height: 20px;
-  border: 2px solid black;
+  border: 2px solid var(--ink);
   box-sizing: border-box;
   font-size: 16.66667px;
   position: relative;
@@ -397,7 +386,7 @@ footer .geo {
 .click-game{
 
   display: block;
-  border: 2px solid black;
+  border: 2px solid var(--ink);
   height: 600px;
   width: 100%;
 
@@ -413,40 +402,49 @@ footer .geo {
   z-index: -999;
 }
 
+/* Click-game flash: hold the photo fully visible, then fade it away.
+   Timing: 100ms hold (0–16.67% of 600ms) + 500ms fade. */
+.click-game img.is-flashing {
+  animation: game-flash 600ms ease-out forwards;
+}
+
+@keyframes game-flash {
+  0%, 16.67% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .click-game:after {
 
   content:'click to see me';
   font-size: 12px;
-  color: white;
+  color: var(--bg);
   text-align: center;
 
   display: block;
   padding: 20px;
   max-width: 60px;
   border-radius: 30px;
-  background-color: black;
+  background-color: var(--ink);
 
+  /* True centering regardless of the badge's own size; the spin uses the
+     separate `rotate` property so it can't override this translate. */
   position: absolute;
-  top: calc(50% - 32px);
-  right: calc(50% - 50px);
- animation: rotating 42s infinite linear;
-/*box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
-*/}
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  animation: rotating 42s infinite linear;
+}
 
 @keyframes rotating {
   from {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
+    rotate: 0deg;
   }
   to {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
+    rotate: 360deg;
   }
 }
 
@@ -460,7 +458,7 @@ footer .geo {
   font-family: syne-semi;
   font-size: 16px;
   font-weight: 500;
-  color: #BBB8BF;
+  color: var(--muted);
   line-height: 50px;
   width: 100%;
   height: auto;
@@ -475,8 +473,16 @@ footer .geo {
   bottom: 0;
   width: 100%;
   height: 1px;
-  background-color: black;
+  background-color: var(--ink);
 
+}
+
+/* Scoped to beat the .main-section p margin so the top margin is removed. */
+.main-section .section-subtitle {
+  font-family: syne-semi;
+  font-size: 16px;
+  color: var(--muted);
+  margin-top: 0;
 }
 
 .skills-wrapper {
@@ -512,6 +518,15 @@ footer .geo {
   margin: 20px 0;
   font-family: syne-semi;
 
+  /* Clickable counter, same concept as the Wireframe one */
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.skill-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .resume-list h2 {
@@ -523,7 +538,7 @@ footer .geo {
 
   font-family: syne-semi;
   font-size: 14px;
-  color: grey;
+  color: var(--muted);
   margin-bottom: 12px;
 }
 
@@ -539,7 +554,7 @@ footer .geo {
 .resume-item {
 
   padding-bottom: 80px;
-  border-left: 2px solid black;
+  border-left: 2px solid var(--ink);
   padding: 40px 20px;
   margin-bottom: 40px;
 }
@@ -563,7 +578,324 @@ footer .geo {
   width: 480px;
   right: 0;
   top: 200px;
-  border: 2px solid black;
+  border: 2px solid var(--ink);
+}
+
+
+/* PROJECT PAGES */
+
+/* Cross-document view transitions: the clicked works-list title morphs into
+   the project hero title. Unsupported browsers just navigate normally. */
+@view-transition {
+  navigation: auto;
+}
+
+/* Shared-element names pairing each works-list link with its hero title
+   (the hero side carries the same name via an inline style). */
+.link-proximus  { view-transition-name: vt-proximus; }
+.link-culturius { view-transition-name: vt-culturius; }
+.link-bsit      { view-transition-name: vt-bsit; }
+.link-aaa       { view-transition-name: vt-aaa; }
+.link-lax       { view-transition-name: vt-lax; }
+
+::view-transition-group(*) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hero: bordered frame with the title stacked five times — outlined echoes
+   above and below the solid centre line. The frame and echoes are separate
+   from the title so the view-transition morph target stays static. */
+.project-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  max-width: 960px;
+  height: 600px;
+  margin: 120px auto 0;
+  overflow: hidden;
+}
+
+/* The rectangle, growing from the title's position outward. */
+.project-hero-frame {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--ink);
+  animation: frame-grow 0.5s cubic-bezier(0.3, 0.7, 0.3, 1) 0.1s backwards;
+}
+
+@keyframes frame-grow {
+  from {
+    transform: scale(0.15, 0.08);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.project-title,
+.project-echo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 60px;
+  font-family: syne-bold;
+  letter-spacing: 0.05em;
+  line-height: normal;
+  white-space: nowrap;
+  margin: 0;
+}
+
+/* Solid title, centred and on top. */
+.project-title {
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Secondary "echo" copies: same size as the title, two above and two below,
+   each clipped to a single half so only the outer part of the letters shows —
+   top halves up top, bottom halves below. Centred with the `translate`
+   property so `transform` is free for the entrance slide, and pushed
+   off-centre via `top`. */
+.project-echo {
+  translate: -50% -50%;
+  color: var(--bg);
+  -webkit-text-stroke: 2px var(--ink);
+  paint-order: stroke fill;
+  animation: echo-emerge 0.5s ease-out 0.35s backwards;
+}
+
+/* Every echo starts collapsed on the title (top:50%) and expands out to its
+   resting `top`, so they all emerge from the same place — the centre. The
+   resting value is the element's own base `top`; keeping it out of the
+   keyframe avoids the var()-in-@keyframes pitfall. */
+@keyframes echo-emerge {
+  from { top: 50%; opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* The frame div is the first child, so the echoes are children 2,3,5,6.
+   Offsets in em (so they shrink with the font on mobile) and evenly stepped
+   so the spacing between every copy is the same. inset(0 0 50% 0) hides the
+   bottom half; inset(50% 0 0 0) hides the top. */
+.project-echo:nth-child(2) { top: calc(50% - 1.7em);  clip-path: inset(0 0 50% 0); }
+.project-echo:nth-child(3) { top: calc(50% - 0.85em); clip-path: inset(0 0 50% 0); }
+.project-echo:nth-child(5) { top: calc(50% + 0.85em); clip-path: inset(50% 0 0 0); }
+.project-echo:nth-child(6) { top: calc(50% + 1.7em);  clip-path: inset(50% 0 0 0); }
+
+.project-meta {
+  display: flex;
+  justify-content: space-around;
+  max-width: 960px;
+  margin: 24px auto 0;
+  font-family: syne-semi;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.project-meta li {
+  width: 190px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+}
+
+/* Placeholder media frames from the design (to be filled with real work). */
+.media-placeholder {
+  border: 2px solid var(--ink);
+  height: 424px;
+  width: 100%;
+}
+
+.media-row {
+  display: flex;
+  gap: 40px;
+}
+
+.media-row .media-placeholder {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .project-hero {
+    height: 60vh;
+    margin-top: 60px;
+  }
+
+  /* Smaller title on mobile; the em-based echo offsets shrink with it. */
+  .project-title,
+  .project-echo {
+    font-size: 36px;
+  }
+
+  .project-meta {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .media-placeholder {
+    height: 240px;
+  }
+
+  .media-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* In column direction flex:1 would collapse the boxes to their borders */
+  .media-row .media-placeholder {
+    flex: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-hero-frame,
+  .project-echo {
+    animation: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+
+/* CONTACT FORM */
+
+.contact-form {
+  max-width: 600px;
+  margin-top: 60px;
+}
+
+.form-field {
+  margin-bottom: 40px;
+}
+
+.form-field label {
+  display: block;
+  font-family: syne-semi;
+  font-size: 16px;
+  text-transform: lowercase;
+  margin-bottom: 12px;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background-color: var(--bg);
+  font-family: syne-semi;
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  padding: 14px 16px;
+  transition: box-shadow ease .2s;
+}
+
+.form-field textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* Honeypot — parked far off-screen. Deliberately NOT display:none, which
+   many spam bots detect and skip; aria-hidden + tabindex=-1 keep it out of
+   screen readers and tab order so real humans never touch it. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.captcha {
+  border: 2px solid var(--ink);
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.captcha-label {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.captcha-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.captcha-option {
+  font-size: 32px;
+  line-height: 1;
+  padding: 10px 14px;
+  background: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform ease .2s, border-color ease .2s;
+}
+
+.captcha-option:hover {
+  transform: rotate(-10deg) scale(1.15);
+}
+
+.captcha-option.is-correct {
+  border-color: var(--ink);
+  transform: none;
+}
+
+/* Mirrors the .text-baseline appear transition */
+.captcha-feedback,
+.form-feedback {
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-top: 16px;
+  min-height: 15px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: .5s;
+}
+
+.captcha-feedback.appear,
+.form-feedback.appear {
+  opacity: 100%;
+  transform: translateY(0px);
+}
+
+.submit-btn {
+  font-family: syne-bold;
+  font-size: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+}
+
+.submit-btn:disabled {
+  opacity: 30%;
+  cursor: not-allowed;
+}
+
+.submit-btn:disabled:before {
+  display: none;
 }
 
 
@@ -822,20 +1154,3 @@ footer .geo {
 /* -------------------------------------------------------------------------- */
 /* MEDIA QUERIES END                             */
 /* -------------------------------------------------------------------------- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

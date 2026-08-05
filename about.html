@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="About Bruno Mattelet — designer, lacrosse captain, born in Liège, based in Brussels.">
+	<link rel="preload" href="assets/style/font/Syne-Bold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="stylesheet" type="text/css" href="assets/style/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
 	<link rel="icon" type="image/png" href="assets/images/favicon.png" />
 
-	<script src="assets/js/jquery.js"></script>
-	<!--script src="assets/js/bundle.js"></script>
-	<!--script src="assets/js/main.js"></script-->
+	<script src="assets/js/components.js" defer></script>
+	<script src="assets/js/main.js" defer></script>
 
 	<title>abt brn mttlt</title>
 	<style>
-        /* Styles for the new Interactive Counter feature */
+        /* Styles for the Interactive Counter feature */
         .interactive-counter {
             position: relative; /* Required for positioning the animation */
             cursor: pointer;
@@ -35,7 +38,7 @@
             left: 50px; /* Position horizontally */
             transform: translateX(-50%);
             font-size: 1.2rem;
-            color: #28a745; /* Green color for the +1 */
+            color: var(--accent); /* themed by the "clr me" palette */
             font-weight: bold;
             /* The animation itself */
             animation: fade-up 800ms ease-out forwards;
@@ -57,48 +60,39 @@
 </head>
 <body>
 
-	<header>
-
-		<h1 class='logo'><a href="index.html">brn • mttlt</a></h1>
-		
-		<nav>
-			<ul class="main_nav link-nav">
-				<li> <a href="about.html">abt </a> </li>
-				<li> <a href="work.html">wrk </a> </li>
-				<li> <a href="contact.html">cntct </a> </li>
-			</ul>
-		</nav>
-	</header>
+	<!-- Shared page chrome; markup lives in assets/js/components.js -->
+	<site-header></site-header>
 
 
 	<section class="main-section">
-		
-	<h2 class="big-title">About</h2>
 
-	<p> Hey, I'm Bruno and people often calls me Bruno...</p>
+		<h2 class="big-title">About</h2>
 
-	<p> Born and raised in Liège, I studied in the beautiful city of Namur and I'm actually working and living in the heart of Brussels.</p>
+		<p> Hey, I'm Bruno and people often calls me Bruno...</p>
 
-	<p> I'm in love with lacrosse and enjoying it as captain of the Belgium National Team and the Brussels Beavers.</p>
+		<p> Born and raised in Liège, I studied in the beautiful city of Namur and I'm actually working and living in the heart of Brussels.</p>
 
-	<div class='click-game'>
-		<img class='click-game-img' src="">
-	</div>
+		<p> I'm in love with lacrosse and enjoying it as captain of the Belgium National Team and the Brussels Beavers.</p>
+
+		<div class='click-game'>
+			<img class='click-game-img' alt="">
+		</div>
 
 	</section>
 
 
 	<section class="main-section">
-		
+
 		<h1 class="big-title">skills</h1>
+		<p class="section-subtitle">Click to approve a skill</p>
 
 		<div class='skills-wrapper'>
 
 			<div class="skills-row">
-				
+
 				<div class="skills-col">
 					<h3 class='skill-title'> Research</h3>
-					<!-- This is the new interactive element -->
+					<!-- Interactive counter -->
             <p class="interactive-counter" id="wireframeCounter">
                 <span class="counter-label">Wireframe</span>
                 <span class="counter-value-container">
@@ -129,7 +123,7 @@
 			</div>
 
 			<div class="skills-row">
-				
+
 				<div class="skills-col">
 					<h3 class='skill-title'> Graphic design</h3>
 					<ul class="skill-graphic skill-list">
@@ -150,320 +144,58 @@
 					</ul>
 				</div>
 			</div>
-		
+
 		</div>
-		
+
 
 	</section>
 
 	<section class="main-section test">
-		
 
-		<div class="resume-decoration-parent">
-			
+
+		<!-- <div class="resume-decoration-parent">
 			<div class="resume-decoration"></div>
-		</div>
+		</div> -->
 
 		<h1 class="big-title">Resume</h1>
 
 		<ul class='resume-list'>
-			
-			<li class='resume-item'> 
-				<h4>2022 - Present</h4>
-				<h2>Movify</h2>
-				<p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the managment of iconography & assets. I was organising, leading, and reporting user-tests.</p>
 
+			<li class='resume-item'>
+				<h4>2024 - Present</h4>
+				<h2>Elia Group</h2>
+				<p>Product designer on Nova, Elia Group's design system — building and documenting its components and tokens, and supporting the product teams adopting it.</p>
 			</li>
 
-			<li class='resume-item'> 
+			<li class='resume-item'>
+				<h4>2022 - 2024</h4>
+				<h2>Movify · Proximus</h2>
+				<p>UX/UI Designer embedded at Proximus. I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the management of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+			</li>
+
+			<li class='resume-item'>
 				<h4>2021 - 2022</h4>
 				<h2>Culturius</h2>
-				<p> Ux/Ui Designer</p>
+				<p>UX/UI Designer.</p>
 			</li>
 
-			<li class='resume-item'> 
-				<h4>2022 - Present</h4>
-				<h2>Movify</h2>
-				<p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the managment of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+			<li class='resume-item'>
+				<h4>2018 - 2020</h4>
+				<h2>Bsit</h2>
+				<p>UX Lead &amp; Full-Stack JavaScript Developer.</p>
 			</li>
 
-			<li class='resume-item'> 
-				<h4>2022 - Present</h4>
-				<h2>Movify</h2>
-				<p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the managment of iconography & assets. I was organising, leading, and reporting user-tests.</p>
-			</li>
-
-			<li class='resume-item'> 
-				<h4>2022 - Present</h4>
-				<h2>Movify</h2>
-				<p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the managment of iconography & assets. I was organising, leading, and reporting user-tests.</p>
-			</li>
-
-			<li class='resume-item'> 
-				<h4>2022 - Present</h4>
-				<h2>Movify</h2>
-				<p>I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the managment of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+			<li class='resume-item'>
+				<h4>2012 - 2016</h4>
+				<h2>Haute École Albert Jacquard</h2>
+				<p>Bachelor in Web Design &amp; Multimedia.</p>
 			</li>
 
 		</ul>
 
 	</section>
 
-	<footer>
-		
-		<ul class="social-list">
-			<li><a target="_blank" href="https://culturius.com/">sptf</a></li>
-			<li><a target="_blank" href="https://culturius.com/">nstgrm</a></li>
-			<li><a target="_blank" href="https://culturius.com/">fcbck</a></li>
-			<li><a target="_blank" href="https://culturius.com/">x</a></li>
-		</ul>
-
-		<span class='geo'> 50°50'26.1"N     4°23'32.9"E</span>
-	</footer>
+	<site-footer></site-footer>
 
 </body>
-
-<script type="text/javascript">
-
-	$(document).ready(function(){
-	
-	var link1 = $( ".link-proximus" );
-	var baseline1 = $( ".proximus-baseline" );
-	var link2 = $( ".link-culturius" );
-	var baseline2 = $( ".culturius-baseline" );
-	var link3 = $( ".link-bsit" );
-	var baseline3 = $( ".bsit-baseline" );
-	var link4 = $( ".link-aaa" );
-	var baseline4 = $( ".aaa-baseline" );
-	var link5 = $( ".link-lax" );
-	var baseline5 = $( ".lax-baseline" );
-
-
-	var changingImage;
-	var imageName;
-	var previousImage;
-
-	//$('.test').clone().addClass('cloned').appendTo('.test');
-
-	function changeImg(folder){
-		
-		console.log(folder);
-		clearInterval(changingImage);
-		imageName = Math.floor(Math.random() * 29) + 1;
-		while(imageName == previousImage){imageName = Math.floor(Math.random() * 26) + 1;}
-
-		$("#img").attr("src","assets/images/"+folder+"/"+ imageName +".jpg");
-		previousImage = imageName;
-		changingImage = setInterval(changeImg, 80, folder);
-	}
-
-	function clearImage(){
-
-		$("#img").attr("src"," ");
-	  	changingImage = clearInterval(changingImage);
-	}
-
-	 
-
-
-	// ENTER-LEAVE LINK 1
-
-	$( ".click-game" )
-		.on( "click", function() {
-
-			imageName = Math.floor(Math.random() * 29) + 1;
-			
-			$( ".click-game-img" )	
-				.finish()
-				.attr("src"," ")
-				.css('opacity', '1')
-				.attr("src","assets/images/me/"+ imageName +".jpg")
-				.animate({opacity: 0,}, 200 );
-					
-		})
-		/*.one("click", function() {
-			$( ".click-game-img:after" ).animate({opacity: 0,}, 200 );
-		})*/
-		;
-
-});
-
-</script>
-<script type="module">
-	
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- Firebase Initialization ---
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        // --- Authentication State Observer ---
-        // This is the core fix: The app logic runs only AFTER authentication is confirmed.
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in, now we can safely run the app logic.
-                initializeAppLogic();
-            }
-        });
-
-        // --- Trigger Authentication ---
-        // This part remains the same, it just starts the sign-in process.
-        (async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
-            }
-        })();
-        
-        // --- Main Application Logic ---
-        // All the interactive code is now wrapped in this function.
-        function initializeAppLogic() {
-            // Cache DOM elements for better performance
-            const imgElement = document.getElementById("img");
-            
-            // State variables for image logic
-            let changingImage = null;
-            let previousImage = null;
-
-            const getRandomImageIndex = (max, previous) => {
-                let index;
-                do {
-                    index = Math.floor(Math.random() * max) + 1;
-                } while (index === previous);
-                return index;
-            };
-            
-            const changeImg = (folder, maxImages = 29) => {
-                clearInterval(changingImage);
-                const imageName = getRandomImageIndex(maxImages, previousImage);
-                imgElement.src = `assets/images/${folder}/${imageName}.jpg`;
-                previousImage = imageName;
-                changingImage = setInterval(() => changeImg(folder, maxImages), 80);
-            };
-
-            const clearImage = () => {
-                clearInterval(changingImage);
-                imgElement.src = "";
-            };
-
-            const unsplashImg = (collection, totalImages = 3) => {
-                clearInterval(changingImage);
-                const unsplashAPIKey = "mzADxqRYqLD-mI6NOWgcK8t6Md9g2T_yS_3plCfpuxc";
-                const url = `https://api.unsplash.com/photos/random?count=${totalImages}&client_id=${unsplashAPIKey}&collection=${collection}`;
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        const index = getRandomImageIndex(totalImages, previousImage) - 1;
-                        const imageUrl = data[index]?.urls?.regular;
-                        if (imageUrl) {
-                            imgElement.src = imageUrl;
-                            previousImage = index;
-                        }
-                    })
-                    .catch(error => console.error("Unsplash API error:", error));
-            };
-
-            const clearUnsplashImg = () => {
-                clearInterval(changingImage);
-                imgElement.src = "";
-            };
-
-            const bindHover = (linkSelector, baselineSelector, onEnter, onLeave) => {
-                const link = document.querySelector(linkSelector);
-                const baseline = baselineSelector ? document.querySelector(baselineSelector) : null;
-
-                if (link) {
-                    link.addEventListener("mouseenter", () => {
-                        if (baseline) baseline.classList.add("text-baseline-appear");
-                        if (onEnter) onEnter();
-                    });
-                    link.addEventListener("mouseleave", () => {
-                        if (baseline) baseline.classList.remove("text-baseline-appear");
-                        if (onLeave) onLeave();
-                    });
-                }
-            };
-
-            const standardProjects = [
-                { link: ".link-proximus", baseline: ".proximus-baseline" },
-                { link: ".link-culturius", baseline: ".culturius-baseline" },
-                { link: ".link-aaa", baseline: ".aaa-baseline" },
-                { link: ".link-lax", baseline: ".lax-baseline" },
-            ];
-
-            standardProjects.forEach(({ link, baseline }) => {
-                bindHover(link, baseline, () => changeImg("me"), clearImage);
-            });
-            bindHover(".link-bsit", ".bsit-baseline", () => unsplashImg("Culture"), clearUnsplashImg);
-            bindHover(".me", null, () => changeImg("me"), clearImage);
-
-            // --- Interactive Counter Logic with Firebase ---
-            const wireframeCounterElement = document.getElementById("wireframeCounter");
-            if (wireframeCounterElement) {
-                const valueElement = wireframeCounterElement.querySelector(".counter-value");
-                const counterId = "wireframe_likes";
-                const counterRef = doc(db, "artifacts", appId, "public/data/counters", counterId);
-
-                onSnapshot(counterRef, (docSnap) => {
-                    if (docSnap.exists() && docSnap.data().count) {
-                        valueElement.textContent = docSnap.data().count;
-                    } else {
-                        valueElement.textContent = 0;
-                    }
-                });
-
-                wireframeCounterElement.addEventListener("click", async () => {
-                    try {
-                        await runTransaction(db, async (transaction) => {
-                            const counterDoc = await transaction.get(counterRef);
-                            let newCount = 1;
-                            if (counterDoc.exists()) {
-                                newCount = (counterDoc.data().count || 0) + 1;
-                            }
-                            transaction.set(counterRef, { count: newCount, lastUpdated: serverTimestamp() }, { merge: true });
-                        });
-
-                        const plusOne = document.createElement("span");
-                        plusOne.textContent = "+1";
-                        plusOne.className = "plus-one-animation";
-                        wireframeCounterElement.appendChild(plusOne);
-
-                        setTimeout(() => {
-                            plusOne.remove();
-                        }, 800);
-
-                    } catch (e) {
-                        console.error("Transaction failed: ", e);
-                    }
-                });
-            }
-        }
-    </script>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
