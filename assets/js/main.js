@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ---------------------------------------------------------------------- *
-     * Contact form (contact page): funny captcha + mailto submit
+     * Contact form (contact page): funny captcha + direct send
      * ---------------------------------------------------------------------- */
     const contactForm = document.getElementById("contactForm");
     if (contactForm) {
@@ -305,6 +305,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const formFeedback = contactForm.querySelector(".form-feedback");
         const submitBtn = contactForm.querySelector(".submit-btn");
         const honeypot = contactForm.querySelector(".hp-field input");
+        const celebration = contactForm.querySelector(".send-celebration");
+
+        /* The page can't send mail by itself, so it POSTs the message to
+         * Formspree, which forwards it to CONTACT_EMAIL. This is Formspree's
+         * plain AJAX endpoint (POST + JSON + `Accept: application/json`), so
+         * no Formspree library is needed and the page keeps its own submit
+         * flow: captcha gate, honeypot, and the send animation.
+         *
+         * The endpoint URL is public by design and belongs in client-side
+         * code; it is not a secret. Blank it out to fall back to opening the
+         * visitor's own mail app. */
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpandeq";
+        const CONTACT_EMAIL = "bruno.mattelet@gmail.com";
+        let sending = false;
 
         // Bots fill forms in milliseconds; a human needs far longer just to
         // solve the captcha. Submits faster than this are treated as bots.
@@ -313,9 +327,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const CORRECT = "🥍";
         const DECOYS = {
-            "🍝": "nice try — carbonara is a superpower, not a proof of humanity",
+            "🍝": "nice try",
             "🍺": "beer comes after the message, that's the deal",
-            "🛹": "skateboarding (not true)",
+            "🥌": "wrong sport",
             "🤖": "that's literally a robot",
         };
         let solved = false;
@@ -360,26 +374,168 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         renderCaptcha();
 
-        contactForm.addEventListener("submit", (event) => {
+        /* ------------------------------------------------------------------ *
+         * Inline validation messages
+         *
+         * The browser's own constraint checks stay in charge of what counts
+         * as valid (`required`, `type="email"`) and of blocking the submit —
+         * only the presentation changes: the default popup bubble is
+         * suppressed and the message is rendered under the field instead, in
+         * the same style as the captcha and form feedback.
+         * ------------------------------------------------------------------ */
+        const errorFor = (field, fieldName) => {
+            if (field.validity.valueMissing) return `${fieldName} is required`;
+            if (field.validity.typeMismatch && field.type === "email") {
+                return "that email doesn't look right — check for a typo";
+            }
+            if (field.validity.tooShort) return `${fieldName} is a bit short`;
+            // Anything else: fall back to the browser's own wording.
+            return field.validationMessage;
+        };
+
+        // The honeypot is deliberately not `required`, so it never matches.
+        contactForm
+            .querySelectorAll("input[required], textarea[required]")
+            .forEach((field) => {
+                const wrap = field.closest(".form-field");
+                const label = wrap && wrap.querySelector("label");
+                const fieldName = label ? label.textContent.trim() : "this field";
+
+                const error = document.createElement("span");
+                error.className = "field-error";
+                error.id = `${field.id}-error`;
+                error.setAttribute("aria-live", "polite");
+                field.insertAdjacentElement("afterend", error);
+
+                const showError = (text) => {
+                    error.textContent = text;
+                    error.classList.add("appear");
+                    field.setAttribute("aria-invalid", "true");
+                    field.setAttribute("aria-describedby", error.id);
+                };
+
+                const clearError = () => {
+                    error.classList.remove("appear");
+                    field.removeAttribute("aria-invalid");
+                    field.removeAttribute("aria-describedby");
+                };
+
+                // Fires during native validation (on submit, or on the
+                // checkValidity() below); preventDefault drops the bubble.
+                field.addEventListener("invalid", (event) => {
+                    event.preventDefault();
+                    showError(errorFor(field, fieldName));
+                });
+
+                // Check on the way out of a field the visitor actually typed
+                // in, so a half-filled form doesn't nag before they're done.
+                field.addEventListener("blur", () => {
+                    if (field.value !== "") field.checkValidity();
+                });
+
+                field.addEventListener("input", () => {
+                    if (field.validity.valid) clearError();
+                });
+            });
+
+        /* Placeholder send animation: the badge collapses to a dot, then a
+         * thank-you, two clinking beers and a burst of confetti. Swap the
+         * whole thing out when the final animation lands. */
+        const spawnConfetti = (host) => {
+            const colors = ["--ink", "--accent", "--muted"];
+            for (let i = 0; i < 16; i += 1) {
+                const piece = document.createElement("span");
+                piece.className = "confetti";
+                piece.style.setProperty("--dx", `${(Math.random() - 0.5) * 220}px`);
+                piece.style.setProperty("--dy", `${-40 - Math.random() * 90}px`);
+                piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 720}deg`);
+                piece.style.backgroundColor = `var(${colors[i % colors.length]})`;
+                piece.style.animationDelay = `${0.45 + Math.random() * 0.25}s`;
+                if (i % 3 === 0) piece.style.borderRadius = "50%";
+                host.appendChild(piece);
+            }
+        };
+
+        const celebrate = () => {
+            submitBtn.classList.add("is-sending");
+            // Wait out the shrink-to-a-dot transition before swapping in the
+            // celebration, so the two don't overlap.
+            setTimeout(() => {
+                submitBtn.style.display = "none";
+                celebration.classList.add("is-active");
+                spawnConfetti(celebration);
+            }, 480);
+        };
+
+        const openMailApp = ({ name, email, message }) => {
+            const subject = encodeURIComponent(`Hey Bruno — note from ${name}`);
+            const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+            window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+        };
+
+        /** Posts the message to Formspree. Resolves "sent", or "mailto" when
+         *  no endpoint is configured yet. Throws if Formspree rejects it. */
+        const deliver = async (payload) => {
+            if (!FORMSPREE_ENDPOINT) {
+                openMailApp(payload);
+                return "mailto";
+            }
+            const response = await fetch(FORMSPREE_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                // Formspree replies to the `email` field automatically;
+                // `_subject` just makes the inbox easier to scan.
+                body: JSON.stringify({
+                    ...payload,
+                    _subject: `Site note from ${payload.name}`,
+                }),
+            });
+            if (!response.ok) {
+                const detail = await response.json().catch(() => null);
+                const reason = detail?.errors?.[0]?.message || response.status;
+                throw new Error(`formspree refused it: ${reason}`);
+            }
+            return "sent";
+        };
+
+        contactForm.addEventListener("submit", async (event) => {
             event.preventDefault();
-            if (!solved) return;
+            if (!solved || sending) return;
+
+            const payload = {
+                name: contactForm.name.value.trim(),
+                email: contactForm.email.value.trim(),
+                message: contactForm.message.value.trim(),
+            };
 
             // Honeypot filled or superhuman fill speed → almost certainly a
-            // bot. Show the normal success message but send nothing, so the
-            // bot learns nothing from being caught.
+            // bot. Play the normal success path but send nothing, so the bot
+            // learns nothing from being caught.
             const looksLikeBot =
                 honeypot.value !== "" ||
                 Date.now() - formReadyAt < MIN_FILL_TIME_MS;
+            if (looksLikeBot) {
+                celebrate();
+                return;
+            }
 
-            showFeedback(formFeedback, "opening your mail app… let's grab that beer 🍺");
-            if (looksLikeBot) return;
-
-            const name = contactForm.name.value.trim();
-            const email = contactForm.email.value.trim();
-            const message = contactForm.message.value.trim();
-            const subject = encodeURIComponent(`Hey Bruno — note from ${name}`);
-            const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
-            window.location.href = `mailto:bruno.mattelet@gmail.com?subject=${subject}&body=${body}`;
+            sending = true;
+            try {
+                const how = await deliver(payload);
+                celebrate();
+                if (how === "mailto") {
+                    showFeedback(formFeedback, "opening your mail app… 🍺");
+                }
+            } catch (error) {
+                sending = false;
+                showFeedback(
+                    formFeedback,
+                    `that didn't go through — mail me at ${CONTACT_EMAIL}`
+                );
+            }
         });
     }
 
@@ -406,10 +562,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const displays = new Map(); // name -> { valueEl, animTarget }
 
-        const playPlusOne = (target) => {
+        const playPlusOne = (target, event) => {
             const plusOne = document.createElement("span");
             plusOne.textContent = "+1";
             plusOne.className = "plus-one-animation";
+            // Spawn it where the click landed (relative to the target box),
+            // rather than always at the same spot.
+            if (event) {
+                const rect = target.getBoundingClientRect();
+                plusOne.style.left = `${event.clientX - rect.left}px`;
+                plusOne.style.top = `${event.clientY - rect.top}px`;
+            }
             target.appendChild(plusOne);
             // Duration must match the CSS animation length.
             setTimeout(() => plusOne.remove(), 800);
@@ -420,11 +583,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (display) display.valueEl.textContent = count;
         };
 
-        const increment = (name) => {
+        const increment = (name, event) => {
             const display = displays.get(name);
             const next = parseInt(display.valueEl.textContent, 10) + 1;
             setCount(name, next); // optimistic update
-            playPlusOne(display.animTarget);
+            playPlusOne(display.animTarget, event);
             if (useLocalFallback) {
                 saveLocal(name, next);
                 return;
@@ -447,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (wireframe) {
             const valueEl = wireframe.querySelector(".counter-value");
             displays.set("Wireframe", { valueEl, animTarget: wireframe });
-            wireframe.addEventListener("click", () => increment("Wireframe"));
+            wireframe.addEventListener("click", (e) => increment("Wireframe", e));
         }
 
         // ...and every word in the skill lists becomes one too.
@@ -461,7 +624,7 @@ document.addEventListener("DOMContentLoaded", () => {
             countWrap.append(valueEl, ")");
             item.appendChild(countWrap);
             displays.set(name, { valueEl, animTarget: item });
-            item.addEventListener("click", () => increment(name));
+            item.addEventListener("click", (e) => increment(name, e));
         });
 
         // Initial counts: database first, localStorage as fallback.

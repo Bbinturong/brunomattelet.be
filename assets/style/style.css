@@ -225,10 +225,9 @@ header nav .main_nav li {
 /* Permanent project info under each title — text styles aligned with the
    about-page resume (.resume-list). */
 .works-info {
-  /* Sits in the right grid column; nudged down to sit against the title's
-     cap height (titles carry a large line-box from the display type). */
-  padding-top: 10px;
+  padding-top: 4px;
 }
+
 
 .works-meta {
   display: block;
@@ -305,21 +304,17 @@ a {
   font-size: 71.66362px;
 }
 
-/* Editorial index rows: oversized title on the left, project info in a right
-   column, generous whitespace between projects. Hovering one row dims the
-   rest and slides an external-link arrow out of the title. The whole row is
-   one click target (stretched-link overlay below). */
+/* Editorial index rows: oversized title with the project info stacked
+   underneath at every screen size, generous whitespace between projects.
+   Hovering one row dims the rest and slides an external-link arrow out of
+   the title. The whole row is one click target (stretched-link overlay). */
 #works .works-list .works-links {
   position: relative;
   display: grid;
-  /* Title column floor (680px) keeps the longest single-token title
-     ("Proximus +", incl. the hover arrow's reserved width) on one line so
-     its "+" never orphans; the two-column layout only runs >1200px (see
-     media query), where this floor always fits. */
-  grid-template-columns: minmax(680px, 1fr) minmax(220px, 34%);
-  gap: 20px 48px;
+  grid-template-columns: 1fr;
+  gap: 6px;
   align-items: start;
-  margin: 0 0 96px;
+  margin: 96px 0 96px 0;
   padding: 0;
   transition: opacity .25s ease;
 }
@@ -924,7 +919,8 @@ footer .geo {
   margin-bottom: 40px;
 }
 
-.captcha-label {
+p.captcha-label {
+  margin: 0;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -956,31 +952,79 @@ footer .geo {
 }
 
 /* Mirrors the .text-baseline appear transition */
-.captcha-feedback,
+p.captcha-feedback,
 .form-feedback {
   font-size: 12px;
   text-transform: uppercase;
+  margin: 0;
   margin-top: 16px;
   min-height: 15px;
   opacity: 0;
   transform: translateY(-10px);
   transition: .5s;
+  display: none;
 }
 
 .captcha-feedback.appear,
 .form-feedback.appear {
+  display: block;
   opacity: 100%;
   transform: translateY(0px);
 }
 
+/* Inline field errors, in place of the browser's own validation bubbles.
+   Same appear transition as the feedback above. */
+.field-error {
+  display: none;
+  font-family: syne-semi;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: .5s;
+}
+
+.field-error.appear {
+  display: block;
+  opacity: 100%;
+  transform: translateY(0px);
+}
+
+/* Flag the offending field without introducing a colour the palette
+   generator doesn't control — a dashed border reads as "look here". */
+.form-field input[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] {
+  border-style: dashed;
+}
+
+/* Submit button: the same slowly-spinning pill badge as the about page's
+   click game (.click-game:after), so the two share one visual language. */
 .submit-btn {
   font-family: syne-bold;
-  font-size: 24px;
-  background: none;
-  border: none;
-  padding: 0;
-  color: var(--ink);
+  font-size: 12px;
   letter-spacing: 0.06em;
+  text-align: center;
+  color: var(--bg);
+  background-color: var(--ink);
+  border: none;
+  display: block;
+  /* content-box + the same 60px measure as the click-game badge, so the two
+     read as the same component. */
+  box-sizing: content-box;
+  padding: 20px;
+  max-width: 60px;
+  border-radius: 30px;
+  margin: 40px 0;
+  animation: rotating 42s infinite linear;
+}
+
+/* Hover parks the badge back at its default, unrotated angle. */
+.submit-btn:hover:not(:disabled) {
+  animation: none;
+  rotate: 0deg;
+  transition: rotate .4s ease;
 }
 
 .submit-btn:disabled {
@@ -990,6 +1034,103 @@ footer .geo {
 
 .submit-btn:disabled:before {
   display: none;
+}
+
+/* Send: the badge collapses into a small dot and vanishes. */
+.submit-btn.is-sending {
+  animation: none;
+  rotate: 0deg;
+  transform: scale(0.04);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .45s cubic-bezier(.55, 0, .68, .2),
+              opacity .18s ease .34s,
+              rotate .45s ease;
+}
+
+/* Placeholder celebration — swap for the final animation later. */
+.send-celebration {
+  position: relative;
+  display: none;
+  height: 130px;
+  margin: 40px 0;
+}
+
+.send-celebration.is-active {
+  display: block;
+}
+
+.send-thanks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  font-family: syne-bold;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  opacity: 0;
+  animation: thanks-fade 2.6s ease forwards;
+}
+
+@keyframes thanks-fade {
+  0%   { opacity: 0; translate: 0 10px; }
+  18%  { opacity: 1; translate: 0 0; }
+  68%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.send-beer {
+  position: absolute;
+  top: 52px;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.send-beer-left  { left: 0;    animation: cheers-left  .9s ease .1s both; }
+.send-beer-right { left: 54px; animation: cheers-right .9s ease .1s both; }
+
+@keyframes cheers-left {
+  0%   { opacity: 0; translate: -36px 0; rotate: -28deg; }
+  55%  { opacity: 1; translate: 8px 0;   rotate: 14deg; }
+  75%  { translate: 0 0; rotate: 0deg; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+
+@keyframes cheers-right {
+  0%   { opacity: 0; translate: 36px 0;  rotate: 28deg; }
+  55%  { opacity: 1; translate: -8px 0;  rotate: -14deg; }
+  75%  { translate: 0 0; rotate: 0deg; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+
+/* Confetti pieces are created by main.js; --dx/--dy/--rot randomize each. */
+.confetti {
+  position: absolute;
+  top: 60px;
+  left: 46px;
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  animation: confetti-pop 1s ease-out .45s forwards;
+}
+
+@keyframes confetti-pop {
+  0%   { opacity: 1; translate: 0 0;               rotate: 0deg; }
+  100% { opacity: 0; translate: var(--dx) var(--dy); rotate: var(--rot); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submit-btn,
+  .send-thanks,
+  .send-beer,
+  .confetti {
+    animation: none;
+  }
+
+  .submit-btn.is-sending {
+    transition: opacity .2s ease;
+  }
 }
 
 
@@ -1007,35 +1148,8 @@ footer .geo {
     left: 10%;
   }
 
-  /* Below the wide desktop, the oversized titles need the full measure —
-     stack each project's info beneath its title instead of a side column. */
   #works .works-list .works-links {
-    grid-template-columns: 1fr;
-    gap: 6px;
     margin-bottom: 72px;
-  }
-
-  .works-info {
-    padding-top: 4px;
-  }
-
-  /* Tablet & mobile (stacked, no reliable hover): pin a persistent external
-     arrow to the right edge of each row. Title reserves space so it wraps
-     before reaching the arrow. */
-  #works .works-links > a {
-    padding-right: 1.4em;
-  }
-
-  #works .works-links > a::after {
-    position: absolute;
-    top: 0.08em;
-    right: 0;
-    margin-left: 0;
-    font-size: 0.7em;
-    line-height: 1;
-    opacity: 1;
-    transform: none;
-    color: var(--ink);
   }
 
 }
@@ -1177,13 +1291,26 @@ footer .geo {
   }
 
   #works .works-list .works-links {
-    grid-template-columns: 1fr;
-    gap: 6px;
     margin-bottom: 56px;
   }
 
-  .works-info {
-    padding-top: 4px;
+  /* Mobile has no hover, so pin the external arrow to the right edge of
+     every row instead of revealing it. The title reserves space so it wraps
+     before reaching the arrow. */
+  #works .works-links > a {
+    padding-right: 1.4em;
+  }
+
+  #works .works-links > a::after {
+    position: absolute;
+    top: 0.08em;
+    right: 0;
+    margin-left: 0;
+    font-size: 0.7em;
+    line-height: 1;
+    opacity: 1;
+    transform: none;
+    color: var(--ink);
   }
 
   .contact-section p {
