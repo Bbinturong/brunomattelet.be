@@ -42,6 +42,12 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
+    def end_headers(self):
+        """Disable caching for local dev, so edits to CSS/JS always show up
+        on a plain reload instead of serving a stale copy."""
+        self.send_header("Cache-Control", "no-store, must-revalidate")
+        super().end_headers()
+
     def _send_json(self, payload, status=200):
         body = json.dumps(payload).encode()
         self.send_response(status)

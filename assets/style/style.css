@@ -85,6 +85,9 @@ header {
     height: 20px;
     max-width: 1200px;
     top: 60px;
+    /* Keep the fixed nav above all page content (oversized works titles, the
+       hero frame, etc.) on every page. */
+    z-index: 10000;
 }
 
 header .logo {
@@ -222,8 +225,9 @@ header nav .main_nav li {
 /* Permanent project info under each title — text styles aligned with the
    about-page resume (.resume-list). */
 .works-info {
-  max-width: 600px;
-  margin-top: 16px;
+  /* Sits in the right grid column; nudged down to sit against the title's
+     cap height (titles carry a large line-box from the display type). */
+  padding-top: 10px;
 }
 
 .works-meta {
@@ -233,13 +237,15 @@ header nav .main_nav li {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--muted);
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .works-info p {
   font-family: syne-semi;
   font-size: 16px;
   margin: 0;
+  /* Cap the measure for comfortable line length (~50 characters). */
+  max-width: 50ch;
 }
 
 .squared .img {
@@ -299,8 +305,89 @@ a {
   font-size: 71.66362px;
 }
 
+/* Editorial index rows: oversized title on the left, project info in a right
+   column, generous whitespace between projects. Hovering one row dims the
+   rest and slides an external-link arrow out of the title. The whole row is
+   one click target (stretched-link overlay below). */
 #works .works-list .works-links {
-  margin: 40px 0 60px;
+  position: relative;
+  display: grid;
+  /* Title column floor (680px) keeps the longest single-token title
+     ("Proximus +", incl. the hover arrow's reserved width) on one line so
+     its "+" never orphans; the two-column layout only runs >1200px (see
+     media query), where this floor always fits. */
+  grid-template-columns: minmax(680px, 1fr) minmax(220px, 34%);
+  gap: 20px 48px;
+  align-items: start;
+  margin: 0 0 96px;
+  padding: 0;
+  transition: opacity .25s ease;
+}
+
+#works .works-list .works-links:last-child {
+  margin-bottom: 0;
+}
+
+/* Focus the pointed row by dimming its siblings. */
+#works .works-list:hover .works-links {
+  opacity: .35;
+}
+
+#works .works-list .works-links:hover {
+  opacity: 1;
+}
+
+#works .works-links > a {
+  line-height: .95;
+  /* Override the global `a { position: relative }` so the stretched-link
+     overlay below resolves to the .works-links row, not the title itself. */
+  position: static;
+}
+
+/* Stretched link: the title anchor's hit area covers the whole row, so a
+   click anywhere on the project (title, meta, or description) follows it.
+   The row's own text must stay non-positioned or it would paint above the
+   overlay and swallow the click (`.main-section p` is position:relative). */
+#works .works-links > a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+#works .works-info,
+#works .works-info p,
+#works .works-meta {
+  position: static;
+}
+
+/* Arrow affordance — hidden until hover, then slides in. */
+#works .works-links > a::after {
+  content: '\2197';
+  display: inline-block;
+  margin-left: .12em;
+  font-size: .5em;
+  vertical-align: 0.32em;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(-.3em);
+  transition: opacity .25s ease, transform .25s ease, color .25s ease;
+}
+
+#works .works-links:hover > a::after {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--ink);
+}
+
+/* Cap the description measure for a comfortable line length. Scoped under
+   #works to win over `.main-section p { max-width: 760px }`. */
+#works .works-info p {
+  max-width: 50ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #works .works-links > a::after { transition: none; }
 }
 
 /* CURSORS */
@@ -402,14 +489,14 @@ footer .geo {
   z-index: -999;
 }
 
-/* Click-game flash: hold the photo fully visible, then fade it away.
-   Timing: 100ms hold (0–16.67% of 600ms) + 500ms fade. */
+/* Click-game flash: the photo pops in instantly, then dissolves straight
+   away over a 200ms ease-out fade — no hold. */
 .click-game img.is-flashing {
-  animation: game-flash 600ms ease-out forwards;
+  animation: game-flash 200ms ease-out forwards;
 }
 
 @keyframes game-flash {
-  0%, 16.67% {
+  0% {
     opacity: 1;
   }
   100% {
@@ -527,6 +614,13 @@ footer .geo {
 .skill-count {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+  /* Syne only ships in bold weights, so use a light system numeral here. */
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 300;
+  /* Raised exponent, like the ² in m². */
+  font-size: 0.6em;
+  vertical-align: super;
+  line-height: 0;
 }
 
 .resume-list h2 {
@@ -913,6 +1007,37 @@ footer .geo {
     left: 10%;
   }
 
+  /* Below the wide desktop, the oversized titles need the full measure —
+     stack each project's info beneath its title instead of a side column. */
+  #works .works-list .works-links {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-bottom: 72px;
+  }
+
+  .works-info {
+    padding-top: 4px;
+  }
+
+  /* Tablet & mobile (stacked, no reliable hover): pin a persistent external
+     arrow to the right edge of each row. Title reserves space so it wraps
+     before reaching the arrow. */
+  #works .works-links > a {
+    padding-right: 1.4em;
+  }
+
+  #works .works-links > a::after {
+    position: absolute;
+    top: 0.08em;
+    right: 0;
+    margin-left: 0;
+    font-size: 0.7em;
+    line-height: 1;
+    opacity: 1;
+    transform: none;
+    color: var(--ink);
+  }
+
 }
 
 
@@ -1052,7 +1177,13 @@ footer .geo {
   }
 
   #works .works-list .works-links {
-    margin: 20px 0;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-bottom: 56px;
+  }
+
+  .works-info {
+    padding-top: 4px;
   }
 
   .contact-section p {
