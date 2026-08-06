@@ -869,7 +869,10 @@ footer .geo {
   margin-bottom: 40px;
 }
 
-.form-field label {
+/* .field-label is the captcha group's heading — a <span>, not a <label>,
+   because the captcha is a group of buttons rather than one control. */
+.form-field label,
+.form-field .field-label {
   display: block;
   font-family: syne-semi;
   font-size: 16px;
