@@ -386,9 +386,9 @@ a {
 }
 
 /* CURSORS */
-.cursor-satelite {
+.cursor-brain {
   display: inline-block;
-  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>📡</text></svg>") 16 0,auto; /*!emojicursor.app*/
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🧠</text></svg>") 16 0,auto; /*!emojicursor.app*/
 }
 .cursor-bear {
   display: inline-block;
@@ -411,9 +411,14 @@ a {
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🍺</text></svg>") 16 0,auto; /*!emojicursor.app*/
 
 }
-.cursor-ballon {
+.cursor-me {
 
-  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🎈</text></svg>") 16 0,auto; /*!emojicursor.app*/
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>💜</text></svg>") 16 0,auto; /*!emojicursor.app*/
+
+}
+.cursor-electricity {
+
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>⚡️</text></svg>") 16 0,auto; /*!emojicursor.app*/
 
 }
 .cursor-chat {
@@ -1002,9 +1007,11 @@ p.captcha-feedback,
   border-style: dashed;
 }
 
-/* Submit button: the same slowly-spinning pill badge as the about page's
-   click game (.click-game:after), so the two share one visual language. */
-.submit-btn {
+/* Slowly-spinning pill badge — the same visual as the about page's click
+   game (.click-game:after), shared by the contact form's submit button and
+   the home page's "let's discuss" link so all three read as one component.
+   Works on both <button> and <a>. */
+.pill-badge {
   font-family: syne-bold;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -1018,18 +1025,23 @@ p.captcha-feedback,
   box-sizing: content-box;
   padding: 20px;
   max-width: 60px;
+  /* min-width beats max-width in CSS, so a label whose longest word is wider
+     than the 60px measure ("discuss") widens the badge instead of spilling
+     out of it. Shorter labels ("Send") keep the 60px default. */
+  min-width: min-content;
   border-radius: 30px;
   margin: 40px 0;
   animation: rotating 42s infinite linear;
 }
 
 /* Hover parks the badge back at its default, unrotated angle. */
-.submit-btn:hover:not(:disabled) {
+.pill-badge:hover:not(:disabled) {
   animation: none;
   rotate: 0deg;
   transition: rotate .4s ease;
 }
 
+/* Form-specific states layered on top of the shared badge. */
 .submit-btn:disabled {
   opacity: 30%;
   cursor: not-allowed;
@@ -1124,7 +1136,7 @@ p.captcha-feedback,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .submit-btn,
+  .pill-badge,
   .send-thanks,
   .send-beer,
   .confetti {
@@ -1404,7 +1416,7 @@ p.captcha-feedback,
   }
 
   .click-game {
-    height: 200px;
+    height: 400px;
   }
 
   .resume-list h2 {

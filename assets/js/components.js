@@ -44,12 +44,12 @@ class SiteFooter extends HTMLElement {
         this.innerHTML = `
     <footer>
         <ul class="social-list">
-            <li><a target="_blank" rel="noopener" href="https://open.spotify.com/">sptf</a></li>
-            <li><a target="_blank" rel="noopener" href="https://www.instagram.com/">nstgrm</a></li>
-            <li><a target="_blank" rel="noopener" href="https://www.facebook.com/">fcbck</a></li>
-            <li><a target="_blank" rel="noopener" href="https://x.com/">x</a></li>
+            <li><a target="_blank" rel="noopener" href="https://open.spotify.com/user/1116262126?si=34c403c348904b52">sptf</a></li>
+            <li><a target="_blank" rel="noopener" href="https://www.instagram.com/bbinturong">nstgrm</a></li>
+            <li><a target="_blank" rel="noopener" href="https://www.facebook.com/bbinturong/">fcbck</a></li>
+            <li><a target="_blank" rel="noopener" href="https://be.linkedin.com/in/bruno-mattelet">lnkdn</a></li>
         </ul>
-        <span class='geo'>50°50'26.1"N 4°23'32.9"E</span>
+        <span class='geo'>50°51'00.3"N 4°22'15.7"E</span>
     </footer>`;
     }
 }

@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const errorFor = (field, fieldName) => {
             if (field.validity.valueMissing) return `${fieldName} is required`;
             if (field.validity.typeMismatch && field.type === "email") {
-                return "that email doesn't look right — check for a typo";
+                return "that email doesn't look right";
             }
             if (field.validity.tooShort) return `${fieldName} is a bit short`;
             // Anything else: fall back to the browser's own wording.
@@ -541,9 +541,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ---------------------------------------------------------------------- *
      * Skill counters (about page): every skill word is a clickable counter
-     * with the same "+1" flourish as the Wireframe one. Counts persist in
-     * the SQLite database when the site runs behind server.py; on static
-     * hosting (no API) they fall back to localStorage.
+     * that throws a "+1" flourish. Counts persist in the SQLite database
+     * when the site runs behind server.py; on static hosting (no API) they
+     * fall back to localStorage.
      * ---------------------------------------------------------------------- */
     const skillsWrapper = document.querySelector(".skills-wrapper");
     if (skillsWrapper) {
@@ -605,15 +605,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         };
 
-        // The featured "Wireframe" counter keeps its own markup...
-        const wireframe = document.getElementById("wireframeCounter");
-        if (wireframe) {
-            const valueEl = wireframe.querySelector(".counter-value");
-            displays.set("Wireframe", { valueEl, animTarget: wireframe });
-            wireframe.addEventListener("click", (e) => increment("Wireframe", e));
-        }
-
-        // ...and every word in the skill lists becomes one too.
+        // Every word in the skill lists is its own counter. The name comes
+        // from the item's first text node, so trailing markup — such as
+        // Skateboarding's "(not true)" aside — stays out of it.
         skillsWrapper.querySelectorAll(".skill-item").forEach((item) => {
             const name = item.childNodes[0].textContent.trim();
             const countWrap = document.createElement("span");

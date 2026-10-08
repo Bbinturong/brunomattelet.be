@@ -21,31 +21,42 @@ CREATE TABLE IF NOT EXISTS skill_increments (
 CREATE INDEX IF NOT EXISTS idx_increments_skill
     ON skill_increments(skill_id, created_at);
 
--- Seed: the full skill list from about.html.
--- "Wireframe" starts at 12 to match its historical on-page count.
+-- Seed: the full skill list from about.html, all starting from zero.
+--
+-- `name` must match the on-page wording character for character: main.js
+-- derives it from the list item's own text and the API rejects anything it
+-- doesn't recognise, so a word renamed on the page silently stops counting
+-- until it is renamed here too.
+--
+-- INSERT OR IGNORE means this is safe to re-run (server.py replays the whole
+-- script on every start) and that adding a word here only ever adds it —
+-- existing counts are never clobbered. Renaming an existing word instead
+-- needs an UPDATE placed above this INSERT, or the seed inserts the new
+-- wording first and the rename then collides with it on the UNIQUE name.
 INSERT OR IGNORE INTO skill_counters (name, category, count) VALUES
-    ('Wireframe',                'Research',       12),
-    ('Personas',                 'Research',        0),
-    ('Wireframe sketching',      'Research',        0),
-    ('Speedy prototyping',       'Research',        0),
-    ('Usability testing',        'Research',        0),
-    ('Facilitating workshop',    'Research',        0),
+    ('Journey mapping',          'Research',        0),
+    ('Low-fi Wireframing',       'Research',        0),
+    ('High-fi prototyping',      'Research',        0),
+    ('User testing',             'Research',        0),
+    ('Workshop facilitation',    'Research',        0),
     ('Information architecture', 'Research',        0),
-    ('High fidelity mockups',    'Product design',  0),
     ('Copywriting',              'Product design',  0),
     ('Micro-interaction',        'Product design',  0),
     ('Front-end development',    'Product design',  0),
-    ('Responsive web design',    'Product design',  0),
+    ('Vibe coding',              'Product design',  0),
     ('Storytelling',             'Product design',  0),
-    ('Design systems',           'Graphic design',  0),
+    ('Design systems',           'Product design',  0),
     ('Iconography',              'Graphic design',  0),
     ('Logotypes',                'Graphic design',  0),
     ('Typography',               'Graphic design',  0),
     ('Color theory',             'Graphic design',  0),
+    ('Ergonomic design',         'Graphic design',  0),
     ('Lacrosse',                 'Superpowers',     0),
-    ('Carbonara',                'Superpowers',     0),
+    ('Carbonara making',         'Superpowers',     0),
     ('Losing at video games',    'Superpowers',     0),
+    ('Making friends',           'Superpowers',     0),
     ('Skateboarding',            'Superpowers',     0);
+
 
 -- ---------------------------------------------------------------------------
 -- Reference queries (used by server.py, kept here as documentation)
