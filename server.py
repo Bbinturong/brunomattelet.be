@@ -17,6 +17,7 @@ so the API cannot be used to grow the table or inject SQL.
 """
 import json
 import sqlite3
+from contextlib import closing
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -26,9 +27,20 @@ SCHEMA_PATH = ROOT / "db" / "schema.sql"
 PORT = 8127
 
 
+# Largest body the increment endpoint will read. The only valid payload is
+# {"name": "..."}, so anything beyond this is noise or an attempt to make the
+# server allocate memory on demand.
+MAX_BODY_BYTES = 1024
+
+
 def get_db():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=5)
     conn.row_factory = sqlite3.Row
+    # ThreadingHTTPServer serves requests concurrently; WAL lets readers run
+    # alongside a writer instead of colliding on "database is locked", and the
+    # busy timeout above absorbs the brief waits that remain.
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=5000")
     return conn
 
 
@@ -58,10 +70,14 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/skills":
-            with get_db() as conn:
-                rows = conn.execute(
-                    "SELECT name, category, count FROM skill_counters ORDER BY id"
-                ).fetchall()
+            try:
+                with closing(get_db()) as conn, conn:
+                    rows = conn.execute(
+                        "SELECT name, category, count FROM skill_counters"
+                        " ORDER BY id"
+                    ).fetchall()
+            except sqlite3.Error:
+                return self._send_json({"error": "database unavailable"}, 503)
             return self._send_json([dict(row) for row in rows])
         return super().do_GET()
 
@@ -69,31 +85,47 @@ class Handler(SimpleHTTPRequestHandler):
         if self.path != "/api/skills/increment":
             return self._send_json({"error": "not found"}, 404)
 
-        length = int(self.headers.get("Content-Length", 0))
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+        except ValueError:
+            return self._send_json({"error": "bad Content-Length"}, 400)
+        if length > MAX_BODY_BYTES:
+            return self._send_json({"error": "body too large"}, 413)
+
         try:
             data = json.loads(self.rfile.read(length) or b"{}")
             name = str(data["name"])
-        except (ValueError, KeyError):
+        except (ValueError, KeyError, TypeError):
             return self._send_json({"error": 'body must be {"name": ...}'}, 400)
 
-        with get_db() as conn:
-            row = conn.execute(
-                "SELECT id FROM skill_counters WHERE name = ?", (name,)
-            ).fetchone()
-            if row is None:
-                return self._send_json({"error": f"unknown skill: {name}"}, 404)
-            conn.execute(
-                "UPDATE skill_counters"
-                "   SET count = count + 1, updated_at = datetime('now')"
-                " WHERE id = ?",
-                (row["id"],),
-            )
-            conn.execute(
-                "INSERT INTO skill_increments (skill_id) VALUES (?)", (row["id"],)
-            )
-            count = conn.execute(
-                "SELECT count FROM skill_counters WHERE id = ?", (row["id"],)
-            ).fetchone()["count"]
+        # `closing` returns the connection to the OS on every path — the
+        # threaded server opens one per request, so leaking them adds up.
+        # The inner `conn` is the transaction: commit on success, roll back
+        # if a statement raises.
+        try:
+            with closing(get_db()) as conn, conn:
+                row = conn.execute(
+                    "SELECT id FROM skill_counters WHERE name = ?", (name,)
+                ).fetchone()
+                if row is None:
+                    return self._send_json({"error": f"unknown skill: {name}"}, 404)
+                conn.execute(
+                    "UPDATE skill_counters"
+                    "   SET count = count + 1, updated_at = datetime('now')"
+                    " WHERE id = ?",
+                    (row["id"],),
+                )
+                conn.execute(
+                    "INSERT INTO skill_increments (skill_id) VALUES (?)",
+                    (row["id"],),
+                )
+                count = conn.execute(
+                    "SELECT count FROM skill_counters WHERE id = ?", (row["id"],)
+                ).fetchone()["count"]
+        except sqlite3.Error:
+            # Busy/locked past the timeout, or a corrupt file: say so rather
+            # than returning a 500 with a traceback in the log.
+            return self._send_json({"error": "database unavailable"}, 503)
         return self._send_json({"name": name, "count": count})
 
 

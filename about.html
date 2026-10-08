@@ -14,33 +14,6 @@
 	<script src="assets/js/main.js" defer></script>
 
 	<title>abt brn mttlt</title>
-	<style>
-        /* "+1" flourish thrown by every skill-word counter (main.js). */
-        .plus-one-animation {
-            position: absolute;
-            top: -10px; /* Initial position above the text */
-            left: 50px; /* Position horizontally */
-            transform: translateX(-50%);
-            font-size: 1.2rem;
-            color: var(--accent); /* themed by the "clr me" palette */
-            font-weight: bold;
-            /* The animation itself */
-            animation: fade-up 800ms ease-out forwards;
-            pointer-events: none; /* Prevents the animation from interfering with clicks */
-        }
-
-        /* The animation keyframes */
-        @keyframes fade-up {
-            from {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
-            to {
-                opacity: 0;
-                transform: translate(-50%, -50px); /* Moves up by 50px while fading out */
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -77,23 +50,23 @@
 				<div class="skills-col">
 					<h3 class='skill-title'> Research</h3>
 					<ul class="skill-research skill-list">
-						<li class="skill-research-item skill-item">Journey mapping</li>
-						<li class="skill-research-item skill-item">Low-fi Wireframing</li>
-						<li class="skill-research-item skill-item">High-fi prototyping</li>
-						<li class="skill-research-item skill-item">User testing</li>
-						<li class="skill-research-item skill-item">Workshop facilitation</li>
-						<li class="skill-research-item skill-item">Information architecture</li>
+						<li class="skill-research-item skill-item" data-skill="Journey mapping">Journey mapping</li>
+						<li class="skill-research-item skill-item" data-skill="Low-fi Wireframing">Low-fi Wireframing</li>
+						<li class="skill-research-item skill-item" data-skill="High-fi prototyping">High-fi prototyping</li>
+						<li class="skill-research-item skill-item" data-skill="User testing">User testing</li>
+						<li class="skill-research-item skill-item" data-skill="Workshop facilitation">Workshop facilitation</li>
+						<li class="skill-research-item skill-item" data-skill="Information architecture">Information architecture</li>
 					</ul>
 				</div>
 				<div class="skills-col">
 					<h3 class='skill-title'> Product design</h3>
 					<ul class="skill-product skill-list">
-						<li class="skill-product-item skill-item">Copywriting</li>
-						<li class="skill-product-item skill-item">Micro-interaction</li>
-						<li class="skill-product-item skill-item">Front-end development</li>
-						<li class="skill-product-item skill-item">Vibe coding</li>
-						<li class="skill-product-item skill-item">Storytelling</li>
-						<li class="skill-graphic-item skill-item">Design systems</li>
+						<li class="skill-product-item skill-item" data-skill="Copywriting">Copywriting</li>
+						<li class="skill-product-item skill-item" data-skill="Micro-interaction">Micro-interaction</li>
+						<li class="skill-product-item skill-item" data-skill="Front-end development">Front-end development</li>
+						<li class="skill-product-item skill-item" data-skill="Vibe coding">Vibe coding</li>
+						<li class="skill-product-item skill-item" data-skill="Storytelling">Storytelling</li>
+						<li class="skill-product-item skill-item" data-skill="Design systems">Design systems</li>
 					</ul>
 				</div>
 			</div>
@@ -103,21 +76,21 @@
 				<div class="skills-col">
 					<h3 class='skill-title'> Graphic design</h3>
 					<ul class="skill-graphic skill-list">
-						<li class="skill-graphic-item skill-item">Iconography</li>
-						<li class="skill-graphic-item skill-item">Logotypes</li>
-						<li class="skill-graphic-item skill-item">Typography</li>
-						<li class="skill-graphic-item skill-item">Color theory</li>
-						<li class="skill-graphic-item skill-item">Ergonomic design</li>
+						<li class="skill-graphic-item skill-item" data-skill="Iconography">Iconography</li>
+						<li class="skill-graphic-item skill-item" data-skill="Logotypes">Logotypes</li>
+						<li class="skill-graphic-item skill-item" data-skill="Typography">Typography</li>
+						<li class="skill-graphic-item skill-item" data-skill="Color theory">Color theory</li>
+						<li class="skill-graphic-item skill-item" data-skill="Ergonomic design">Ergonomic design</li>
 					</ul>
 				</div>
 				<div class="skills-col">
 					<h3 class='skill-title'> Superpowers</h3>
 					<ul class="skill-powers skill-list">
-						<li class="skill-powers-item skill-item">Lacrosse</li>
-						<li class="skill-powers-item skill-item">Carbonara making</li>
-						<li class="skill-powers-item skill-item">Losing at video games</li>
-						<li class="skill-powers-item skill-item">Making friends</li>
-						<li class="skill-powers-item skill-item">Skateboarding <span style="opacity:20%;">(not true)</span></li>
+						<li class="skill-powers-item skill-item" data-skill="Lacrosse">Lacrosse</li>
+						<li class="skill-powers-item skill-item" data-skill="Carbonara making">Carbonara making</li>
+						<li class="skill-powers-item skill-item" data-skill="Losing at video games">Losing at video games</li>
+						<li class="skill-powers-item skill-item" data-skill="Making friends">Making friends</li>
+						<li class="skill-powers-item skill-item" data-skill="Skateboarding">Skateboarding <span style="opacity:20%;">(not true)</span></li>
 					</ul>
 				</div>
 			</div>

@@ -209,6 +209,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return i;
         };
 
+        // A 12.5fps image swap is a strobe to anyone sensitive to it, so when
+        // reduced motion is asked for, show a single still instead of cycling.
+        const wantsStillness = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        );
+
         // Cycle a project's folder, or the local "me" photos when project is null.
         const startCycle = (project) => {
             clearInterval(cycleTimer);
@@ -219,6 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     : `assets/images/me/${nextIndex(LOCAL_IMAGE_COUNT)}.webp`;
             };
             tick();
+            if (wantsStillness.matches) return;
             cycleTimer = setInterval(tick, CYCLE_INTERVAL_MS);
         };
 
@@ -552,8 +559,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const STORAGE_KEY = "skillCounts";
         let useLocalFallback = false;
 
-        const localCounts = () =>
-            JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        const localCounts = () => {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+            } catch {
+                return {}; /* corrupt storage — start from an empty set */
+            }
+        };
         const saveLocal = (name, count) => {
             const all = localCounts();
             all[name] = count;
@@ -597,28 +609,48 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name }),
             })
-                .then((res) => (res.ok ? res.json() : Promise.reject()))
+                .then((res) => {
+                    if (res.ok) return res.json();
+                    // The API answered, so it is up — this one word just
+                    // isn't in the database. Keep every other word talking to
+                    // the server instead of dropping the page to localStorage.
+                    throw Object.assign(new Error("rejected"), { answered: true });
+                })
                 .then(({ count }) => setCount(name, count)) // server value wins
-                .catch(() => {
+                .catch((error) => {
+                    if (error.answered) return; // optimistic count stands
                     useLocalFallback = true;
                     saveLocal(name, next);
                 });
         };
 
-        // Every word in the skill lists is its own counter. The name comes
-        // from the item's first text node, so trailing markup — such as
-        // Skateboarding's "(not true)" aside — stays out of it.
+        // Every word in the skill lists is its own counter. `data-skill` is
+        // the database key, kept separate from the wording so the copy can be
+        // reworded without silently detaching the counter; the first text
+        // node is only a fallback for an item missing the attribute.
         skillsWrapper.querySelectorAll(".skill-item").forEach((item) => {
-            const name = item.childNodes[0].textContent.trim();
+            const name = item.dataset.skill || item.childNodes[0].textContent.trim();
             const countWrap = document.createElement("span");
             countWrap.className = "skill-count";
             countWrap.append(" (");
             const valueEl = document.createElement("span");
             valueEl.textContent = "0";
             countWrap.append(valueEl, ")");
+            // Announce the new total, but only for the word just activated.
+            countWrap.setAttribute("aria-live", "polite");
             item.appendChild(countWrap);
             displays.set(name, { valueEl, animTarget: item });
+
+            // These are controls, not decoration: give them a role, a tab
+            // stop and the keyboard activation a button would have had.
+            item.setAttribute("role", "button");
+            item.setAttribute("tabindex", "0");
             item.addEventListener("click", (e) => increment(name, e));
+            item.addEventListener("keydown", (e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault(); // Space would scroll the page
+                increment(name, null);
+            });
         });
 
         // Initial counts: database first, localStorage as fallback.

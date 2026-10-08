@@ -611,6 +611,45 @@ footer .geo {
   user-select: none;
 }
 
+/* Keyboard users need to see which word they are on — the items are now
+   real controls (role=button, tabindex) rather than decorative list items. */
+.skill-list .skill-item:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+/* "+1" flourish thrown by every skill-word counter (main.js). Lives here
+   rather than in a page <style> block so every page shares one definition. */
+.plus-one-animation {
+  position: absolute;
+  top: -10px;
+  left: 50px;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: var(--accent); /* themed by the "clr me" palette */
+  font-weight: bold;
+  animation: fade-up 800ms ease-out forwards;
+  pointer-events: none; /* never swallow the next click */
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plus-one-animation {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .skill-count {
   color: var(--muted);
   font-variant-numeric: tabular-nums;

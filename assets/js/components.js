@@ -44,7 +44,7 @@ class SiteFooter extends HTMLElement {
         this.innerHTML = `
     <footer>
         <ul class="social-list">
-            <li><a target="_blank" rel="noopener" href="https://open.spotify.com/user/1116262126?si=34c403c348904b52">sptf</a></li>
+            <li><a target="_blank" rel="noopener" href="https://open.spotify.com/user/1116262126">sptf</a></li>
             <li><a target="_blank" rel="noopener" href="https://www.instagram.com/bbinturong">nstgrm</a></li>
             <li><a target="_blank" rel="noopener" href="https://www.facebook.com/bbinturong/">fcbck</a></li>
             <li><a target="_blank" rel="noopener" href="https://be.linkedin.com/in/bruno-mattelet">lnkdn</a></li>
