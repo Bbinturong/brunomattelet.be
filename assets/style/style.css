@@ -71,6 +71,9 @@ body {
   font-family: Syne;
   font-style: normal;
   letter-spacing: 0.06em;
+  /* Lining figures everywhere: all digits sit on the same cap/x height
+     instead of Syne's default old-style numerals that dip below the line. */
+  font-variant-numeric: lining-nums;
 }
 
 body p {
@@ -241,7 +244,7 @@ header nav .main_nav li {
 
 .works-info p {
   font-family: syne-semi;
-  font-size: 16px;
+  font-size: 14px;
   margin: 0;
   /* Cap the measure for comfortable line length (~50 characters). */
   max-width: 50ch;
@@ -425,6 +428,24 @@ a {
 
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>💌</text></svg>") 16 0,auto; /*!emojicursor.app*/
 
+}
+
+/* Per-project hover cursor for the works list. Keyed on each link's own
+   class so it overrides the shared .cursor-external (declared above). */
+.link-proximus {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>📡</text></svg>") 16 0,auto;
+}
+.link-aaa {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>⚡️</text></svg>") 16 0,auto;
+}
+.link-bsit {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🪻</text></svg>") 16 0,auto;
+}
+.link-lax {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>👶</text></svg>") 16 0,auto;
+}
+.link-culturius {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='52' height='62' viewport='0 0 100 100' style='fill:black;font-size:31px;'><text y='50%'>🎶</text></svg>") 16 0,auto;
 }
 
 
@@ -652,7 +673,7 @@ footer .geo {
 
 .skill-count {
   color: var(--muted);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   /* Syne only ships in bold weights, so use a light system numeral here. */
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 300;
@@ -679,7 +700,7 @@ footer .geo {
 .resume-list p {
 
   font-family: syne-semi;
-  font-size: 16px;
+  font-size: 14px;
   width: 600px;
   margin-bottom: 0;
 }
@@ -913,10 +934,7 @@ footer .geo {
   margin-bottom: 40px;
 }
 
-/* .field-label is the captcha group's heading — a <span>, not a <label>,
-   because the captcha is a group of buttons rather than one control. */
-.form-field label,
-.form-field .field-label {
+.form-field label {
   display: block;
   font-family: syne-semi;
   font-size: 16px;
@@ -960,46 +978,7 @@ footer .geo {
   overflow: hidden;
 }
 
-.captcha {
-  border: 2px solid var(--ink);
-  padding: 20px;
-  margin-bottom: 40px;
-}
-
-p.captcha-label {
-  margin: 0;
-  font-size: 12px;
-  text-transform: uppercase;
-}
-
-.captcha-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.captcha-option {
-  font-size: 32px;
-  line-height: 1;
-  padding: 10px 14px;
-  background: none;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform ease .2s, border-color ease .2s;
-}
-
-.captcha-option:hover {
-  transform: rotate(-10deg) scale(1.15);
-}
-
-.captcha-option.is-correct {
-  border-color: var(--ink);
-  transform: none;
-}
-
 /* Mirrors the .text-baseline appear transition */
-p.captcha-feedback,
 .form-feedback {
   font-size: 12px;
   text-transform: uppercase;
@@ -1012,7 +991,6 @@ p.captcha-feedback,
   display: none;
 }
 
-.captcha-feedback.appear,
 .form-feedback.appear {
   display: block;
   opacity: 100%;

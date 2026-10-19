@@ -131,7 +131,7 @@ const generatePalette = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    const LOCAL_IMAGE_COUNT = 29;
+    const LOCAL_IMAGE_COUNT = 36;
     const CYCLE_INTERVAL_MS = 80;
 
     /* ---------------------------------------------------------------------- *
@@ -185,11 +185,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (imgElement) {
         const PROJECTS = {
-            ".link-proximus":  { folder: "proximus", count: 12 },
-            ".link-culturius": { folder: "culturius", count: 14 },
-            ".link-bsit":      { folder: "culturius", count: 14 },
-            ".link-aaa":       { folder: "culturius", count: 14 },
-            ".link-lax":       { folder: "culturius", count: 14 },
+            // Folder names follow the homepage labels, not the legacy class
+            // names: link-bsit shows "Lavender", link-lax "Bsit app",
+            // link-aaa "Nova". Images exported from the Perso Figma file.
+            ".link-proximus":  { folder: "proximus", count: 24 },
+            ".link-culturius": { folder: "culturius", count: 24 },
+            ".link-bsit":      { folder: "lavender", count: 24 },
+            ".link-aaa":       { folder: "nova", count: 14 },
+            ".link-lax":       { folder: "bsit", count: 23 },
         };
 
         let cycleTimer = null;
@@ -222,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const tick = () => {
                 imgElement.src = project
                     ? projectSrc(project.folder, nextIndex(project.count))
-                    : `assets/images/me/${nextIndex(LOCAL_IMAGE_COUNT)}.webp`;
+                    : `assets/images/me/${nextIndex(LOCAL_IMAGE_COUNT)}.jpg`;
             };
             tick();
             if (wantsStillness.matches) return;
@@ -285,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clickGame.addEventListener("click", async () => {
             const name = randomIndex(LOCAL_IMAGE_COUNT, previousPhoto);
             previousPhoto = name;
-            gameImg.src = `assets/images/me/${name}.webp`;
+            gameImg.src = `assets/images/me/${name}.jpg`;
 
             // Wait until the photo is actually decoded so the flash never
             // shows a blank or half-loaded image on a cold cache.
@@ -303,12 +306,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ---------------------------------------------------------------------- *
-     * Contact form (contact page): funny captcha + direct send
+     * Contact form (contact page): direct send, with silent bot defences
      * ---------------------------------------------------------------------- */
     const contactForm = document.getElementById("contactForm");
     if (contactForm) {
-        const optionsWrap = contactForm.querySelector(".captcha-options");
-        const captchaFeedback = contactForm.querySelector(".captcha-feedback");
         const formFeedback = contactForm.querySelector(".form-feedback");
         const submitBtn = contactForm.querySelector(".submit-btn");
         const honeypot = contactForm.querySelector(".hp-field input");
@@ -318,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
          * Formspree, which forwards it to CONTACT_EMAIL. This is Formspree's
          * plain AJAX endpoint (POST + JSON + `Accept: application/json`), so
          * no Formspree library is needed and the page keeps its own submit
-         * flow: captcha gate, honeypot, and the send animation.
+         * flow: honeypot, time-gate, and the send animation.
          *
          * The endpoint URL is public by design and belongs in client-side
          * code; it is not a secret. Blank it out to fall back to opening the
@@ -327,19 +328,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const CONTACT_EMAIL = "bruno.mattelet@gmail.com";
         let sending = false;
 
-        // Bots fill forms in milliseconds; a human needs far longer just to
-        // solve the captcha. Submits faster than this are treated as bots.
+        // Time-gate: bots fill and submit forms in milliseconds. A genuine
+        // visitor needs longer to read and type, so a submit sooner than this
+        // after page load is treated as a bot (together with the honeypot).
         const MIN_FILL_TIME_MS = 3000;
         const formReadyAt = Date.now();
-
-        const CORRECT = "🥍";
-        const DECOYS = {
-            "🍝": "nice try",
-            "🍺": "beer comes after the message, that's the deal",
-            "🥌": "wrong sport",
-            "🤖": "that's literally a robot",
-        };
-        let solved = false;
 
         const showFeedback = (el, text) => {
             el.textContent = text;
@@ -350,37 +343,6 @@ document.addEventListener("DOMContentLoaded", () => {
             );
         };
 
-        const renderCaptcha = () => {
-            const emojis = [CORRECT, ...Object.keys(DECOYS)].sort(
-                () => Math.random() - 0.5
-            );
-            optionsWrap.innerHTML = "";
-            emojis.forEach((emoji) => {
-                const btn = document.createElement("button");
-                btn.type = "button";
-                btn.className = "captcha-option";
-                btn.textContent = emoji;
-                btn.setAttribute("aria-label", `answer ${emoji}`);
-                btn.addEventListener("click", () => {
-                    if (solved) return;
-                    if (emoji === CORRECT) {
-                        solved = true;
-                        btn.classList.add("is-correct");
-                        submitBtn.disabled = false;
-                        showFeedback(
-                            captchaFeedback,
-                            "ok, only humans love lacrosse. you may pass."
-                        );
-                    } else {
-                        showFeedback(captchaFeedback, DECOYS[emoji]);
-                        renderCaptcha(); // reshuffle after a wrong pick
-                    }
-                });
-                optionsWrap.appendChild(btn);
-            });
-        };
-        renderCaptcha();
-
         /* ------------------------------------------------------------------ *
          * Inline validation messages
          *
@@ -388,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
          * as valid (`required`, `type="email"`) and of blocking the submit —
          * only the presentation changes: the default popup bubble is
          * suppressed and the message is rendered under the field instead, in
-         * the same style as the captcha and form feedback.
+         * the same style as the form feedback.
          * ------------------------------------------------------------------ */
         const errorFor = (field, fieldName) => {
             if (field.validity.valueMissing) return `${fieldName} is required`;
@@ -510,7 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         contactForm.addEventListener("submit", async (event) => {
             event.preventDefault();
-            if (!solved || sending) return;
+            if (sending) return;
 
             const payload = {
                 name: contactForm.name.value.trim(),
@@ -632,13 +594,26 @@ document.addEventListener("DOMContentLoaded", () => {
             const name = item.dataset.skill || item.childNodes[0].textContent.trim();
             const countWrap = document.createElement("span");
             countWrap.className = "skill-count";
-            countWrap.append(" (");
+            // Non-breaking space: a plain one lets the line break here, which
+            // drops the number onto a line of its own below the word.
+            countWrap.append("\u00A0(");
             const valueEl = document.createElement("span");
             valueEl.textContent = "0";
             countWrap.append(valueEl, ")");
             // Announce the new total, but only for the word just activated.
             countWrap.setAttribute("aria-live", "polite");
-            item.appendChild(countWrap);
+            // The counter belongs to the skill word, so place it straight
+            // after the item's own text rather than after any trailing aside
+            // (Skateboarding's "(not true)") — appended at the very end, it
+            // gets pushed onto a line of its own below the word. The word's
+            // own trailing space moves to the far side of the counter so an
+            // aside doesn't end up butted against it.
+            const label = item.firstChild;
+            label.textContent = label.textContent.replace(/\s+$/, "");
+            label.after(countWrap);
+            if (countWrap.nextSibling) {
+                countWrap.after(document.createTextNode(" "));
+            }
             displays.set(name, { valueEl, animTarget: item });
 
             // These are controls, not decoration: give them a role, a tab

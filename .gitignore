@@ -3,3 +3,6 @@ node_modules/
 *.log
 db/skills.db
 copy/
+dist/
+db/skills.db-shm
+db/skills.db-wal

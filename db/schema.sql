@@ -54,8 +54,7 @@ INSERT OR IGNORE INTO skill_counters (name, category, count) VALUES
     ('Lacrosse',                 'Superpowers',     0),
     ('Carbonara making',         'Superpowers',     0),
     ('Losing at video games',    'Superpowers',     0),
-    ('Making friends',           'Superpowers',     0),
-    ('Skateboarding',            'Superpowers',     0);
+    ('Making friends',           'Superpowers',     0);
 
 
 -- ---------------------------------------------------------------------------
