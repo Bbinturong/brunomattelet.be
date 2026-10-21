@@ -26,11 +26,27 @@ DB_PATH = ROOT / "db" / "skills.db"
 SCHEMA_PATH = ROOT / "db" / "schema.sql"
 PORT = 8127
 
+# Loopback only. Binding to "" would publish this folder on every network the
+# laptop joins, so anyone on the same wifi could browse it. Set HOST="0.0.0.0"
+# deliberately if you ever need to open the preview to another device.
+HOST = "127.0.0.1"
+
 
 # Largest body the increment endpoint will read. The only valid payload is
 # {"name": "..."}, so anything beyond this is noise or an attempt to make the
 # server allocate memory on demand.
 MAX_BODY_BYTES = 1024
+
+# Only these extensions are served as site content. Everything else — the
+# SQLite database, the schema, this script, dotfiles — is refused, so the
+# server cannot hand out the repository it is running from. `.git` is the
+# important one: it holds the whole commit history, not just what is live.
+PUBLIC_SUFFIXES = {
+    ".html", ".css", ".js", ".mjs", ".json", ".txt", ".xml", ".webmanifest",
+    ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".avif", ".ico",
+    ".woff", ".woff2", ".ttf", ".otf", ".eot",
+    ".mp4", ".webm", ".mp3", ".pdf",
+}
 
 
 def get_db():
@@ -53,6 +69,18 @@ def init_db():
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def _is_public(self, path):
+        """True when `path` is site content a visitor may fetch."""
+        relative = Path(self.translate_path(path)).relative_to(ROOT)
+        # Any dot-segment (.git, .gitignore, .claude, .DS_Store) is private.
+        if any(part.startswith(".") for part in relative.parts):
+            return False
+        # A bare directory resolves to its index.html, which passes below.
+        target = Path(self.translate_path(path))
+        if target.is_dir():
+            return True
+        return target.suffix.lower() in PUBLIC_SUFFIXES
 
     def end_headers(self):
         """Disable caching for local dev, so edits to CSS/JS always show up
@@ -79,7 +107,25 @@ class Handler(SimpleHTTPRequestHandler):
             except sqlite3.Error:
                 return self._send_json({"error": "database unavailable"}, 503)
             return self._send_json([dict(row) for row in rows])
+
+        try:
+            allowed = self._is_public(self.path)
+        except ValueError:
+            allowed = False  # resolved outside ROOT
+        if not allowed:
+            self.send_error(404, "Not Found")
+            return
         return super().do_GET()
+
+    def do_HEAD(self):
+        try:
+            allowed = self._is_public(self.path)
+        except ValueError:
+            allowed = False
+        if not allowed:
+            self.send_error(404, "Not Found")
+            return
+        return super().do_HEAD()
 
     def do_POST(self):
         if self.path != "/api/skills/increment":
@@ -131,5 +177,5 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     init_db()
-    print(f"Serving on http://localhost:{PORT} (db: {DB_PATH})")
-    ThreadingHTTPServer(("", PORT), Handler).serve_forever()
+    print(f"Serving on http://{HOST}:{PORT} (db: {DB_PATH})")
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
