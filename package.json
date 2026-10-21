@@ -1,17 +1,7 @@
 {
   "name": "brunomattelet.be",
   "version": "1.0.0",
-  "description": "Portfolio",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "node-fetch": "^2.6.1",
-    "uniq": "^1.0.1",
-    "unsplash-js": "^6.3.0"
-  },
-  "devDependencies": {}
+  "description": "Bruno Mattelet — portfolio (static site, no build step)",
+  "private": true,
+  "license": "ISC"
 }

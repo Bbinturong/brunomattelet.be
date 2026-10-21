@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Contact Bruno Mattelet — drop a note, discuss a project, grab a beer in Brussels.">
+	<link rel="preload" href="assets/style/font/Syne-Bold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
+	<script>
+	/* Restores the saved "clr" palette before the first paint. This must stay
+	   inline and blocking: main.js is deferred, which runs *after* parsing, so
+	   leaving the job to it paints the default colours first and the page
+	   visibly changes colour on every navigation. The html background is set
+	   too, so the canvas itself never flashes white under a dark palette. */
+	(function () {
+	    try {
+	        if (localStorage.getItem("colorMeActive") !== "1") return;
+	        var p = JSON.parse(localStorage.getItem("colorMePalette") || "null");
+	        if (!p) return;
+	        var s = document.documentElement.style;
+	        ["--bg", "--ink", "--muted", "--soft", "--accent"].forEach(function (k) {
+	            if (p[k]) s.setProperty(k, p[k]);
+	        });
+		    } catch (e) {
+	        /* corrupt or blocked storage: the default palette applies */
+	    }
+	})();
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="assets/style/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
+	<link rel="icon" type="image/png" href="assets/images/favicon.png" />
+
+	<script src="assets/js/components.js"></script>
+	<script src="assets/js/main.js" defer></script>
+
+	<title>cntct brn mttlt</title>
+</head>
+<body>
+
+	<!-- Shared page chrome; markup lives in assets/js/components.js -->
+	<site-header></site-header>
+
+	<section class="main-section">
+
+		<h2 class="big-title">Contact</h2>
+
+		<p>Wanna discuss a future project, some misspelling I did or anything else?</p>
+
+		<p>Drop me a note and let's grab a beer.</p>
+
+		<form class="contact-form" id="contactForm">
+
+			<div class="form-field">
+				<label for="contactName">name</label>
+				<input type="text" id="contactName" name="name" required autocomplete="name">
+			</div>
+
+			<div class="form-field">
+				<label for="contactEmail">email</label>
+				<input type="email" id="contactEmail" name="email" required autocomplete="email">
+			</div>
+
+			<div class="form-field">
+				<label for="contactMessage">message</label>
+				<textarea id="contactMessage" name="message" required></textarea>
+			</div>
+
+			<!-- Honeypot: humans never see this field; anything that fills it
+			     is treated as a bot and the submit is silently dropped. -->
+			<div class="hp-field" aria-hidden="true">
+				<label for="contactWebsite">website</label>
+				<input type="text" id="contactWebsite" name="website" tabindex="-1" autocomplete="off">
+			</div>
+
+			<button type="submit" class="pill-badge submit-btn cursor-chat">Send</button>
+
+			<!-- Send confirmation. Takes the form's place once the message
+			     is away; confetti is added by main.js. role="status" so it is
+			     announced rather than only seen. -->
+			<div class="send-celebration" role="status">
+				<div class="send-beers" aria-hidden="true">
+					<span class="send-beer send-beer-left">🍺</span>
+					<span class="send-beer send-beer-right">🍺</span>
+				</div>
+				<p class="send-thanks">Thank you</p>
+				<p class="send-note">Your message is on its way, I'll get back to you soon.</p>
+				<p class="send-again-wrap">
+					<button type="button" class="pill-badge send-again cursor-chat">send another</button>
+				</p>
+			</div>
+
+			<p class="form-feedback" aria-live="polite"></p>
+
+		</form>
+
+	</section>
+
+	<site-footer></site-footer>
+
+</body>
+</html>
