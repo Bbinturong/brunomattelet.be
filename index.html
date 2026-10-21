@@ -11,13 +11,35 @@
     <link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- It's good practice to load reset/normalize CSS first -->
+    <script>
+    /* Restores the saved "clr" palette before the first paint. This must stay
+       inline and blocking: main.js is deferred, which runs *after* parsing, so
+       leaving the job to it paints the default colours first and the page
+       visibly changes colour on every navigation. The html background is set
+       too, so the canvas itself never flashes white under a dark palette. */
+    (function () {
+        try {
+            if (localStorage.getItem("colorMeActive") !== "1") return;
+            var p = JSON.parse(localStorage.getItem("colorMePalette") || "null");
+            if (!p) return;
+            var s = document.documentElement.style;
+            ["--bg", "--ink", "--muted", "--soft", "--accent"].forEach(function (k) {
+                if (p[k]) s.setProperty(k, p[k]);
+            });
+            if (p["--bg"]) s.backgroundColor = p["--bg"];
+        } catch (e) {
+            /* corrupt or blocked storage: the default palette applies */
+        }
+    })();
+    </script>
+
     <link rel="stylesheet" type="text/css" href="assets/style/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/style/style.css">
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
 
     <title>brn • std</title>
 
-    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/components.js"></script>
     <script src="assets/js/main.js" defer></script>
 </head>
 <body>

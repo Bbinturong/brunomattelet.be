@@ -6,11 +6,33 @@
 	<meta name="description" content="About Bruno Mattelet — designer, lacrosse captain, born in Liège, based in Brussels.">
 	<link rel="preload" href="assets/style/font/Syne-Bold.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
+	<script>
+	/* Restores the saved "clr" palette before the first paint. This must stay
+	   inline and blocking: main.js is deferred, which runs *after* parsing, so
+	   leaving the job to it paints the default colours first and the page
+	   visibly changes colour on every navigation. The html background is set
+	   too, so the canvas itself never flashes white under a dark palette. */
+	(function () {
+	    try {
+	        if (localStorage.getItem("colorMeActive") !== "1") return;
+	        var p = JSON.parse(localStorage.getItem("colorMePalette") || "null");
+	        if (!p) return;
+	        var s = document.documentElement.style;
+	        ["--bg", "--ink", "--muted", "--soft", "--accent"].forEach(function (k) {
+	            if (p[k]) s.setProperty(k, p[k]);
+	        });
+	        if (p["--bg"]) s.backgroundColor = p["--bg"];
+	    } catch (e) {
+	        /* corrupt or blocked storage: the default palette applies */
+	    }
+	})();
+	</script>
+
 	<link rel="stylesheet" type="text/css" href="assets/style/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
 	<link rel="icon" type="image/png" href="assets/images/favicon.png" />
 
-	<script src="assets/js/components.js" defer></script>
+	<script src="assets/js/components.js"></script>
 	<script src="assets/js/main.js" defer></script>
 
 	<title>abt brn mttlt</title>
@@ -113,31 +135,46 @@
 			<li class='resume-item'>
 				<h4>2024 - Present</h4>
 				<h2>Elia Group</h2>
-				<p>Product designer on Nova, Elia Group's design system — building and documenting its components and tokens, and supporting the product teams adopting it.</p>
+				<p>Product designer on Nova, Elia Group&rsquo;s design system. I build and document its components and tokens, and work with the product teams adopting them.</p>
+				<ul class="resume-tags">
+					<li>Design system</li><li>Components</li><li>Tokens</li><li>Documentation</li>
+				</ul>
 			</li>
 
 			<li class='resume-item'>
 				<h4>2022 - 2024</h4>
-				<h2>Movify · Proximus</h2>
-				<p>UX/UI Designer embedded at Proximus. I was in charge of the creation of a new design system and the application of it through a new redesigned app, the design of features from the brainstorming to the push in production and the management of iconography & assets. I was organising, leading, and reporting user-tests.</p>
+				<h2>Proximus</h2>
+				<p>UX/UI Designer embedded at Proximus, then lead of the design system team. I built a multi-brand design system and rolled it out through a redesigned app, took features from brainstorm to production, and owned the iconography and asset library. I also ran the user testing, from moderating the sessions to reporting the findings.</p>
+				<ul class="resume-tags">
+					<li>Design system</li><li>Multi-brand</li><li>Mobile app</li><li>User testing</li><li>Iconography</li>
+				</ul>
 			</li>
 
 			<li class='resume-item'>
 				<h4>2021 - 2022</h4>
 				<h2>Culturius</h2>
-				<p>UX/UI Designer.</p>
+				<p>TODO placeholder — UX/UI Designer. Built the landing page, the dashboard and the CRM platform for an early-stage startup.</p>
+				<ul class="resume-tags">
+					<li>TODO tag</li><li>UX/UI</li><li>Dashboard</li><li>CRM</li>
+				</ul>
 			</li>
 
 			<li class='resume-item'>
 				<h4>2018 - 2020</h4>
 				<h2>Bsit</h2>
-				<p>UX Lead &amp; Full-Stack JavaScript Developer.</p>
+				<p>TODO placeholder — UX Lead and full-stack JavaScript developer. Led the UX of the Bsit app and shipped the front end alongside it.</p>
+				<ul class="resume-tags">
+					<li>TODO tag</li><li>UX Lead</li><li>JavaScript</li><li>Mobile app</li>
+				</ul>
 			</li>
 
 			<li class='resume-item'>
 				<h4>2012 - 2016</h4>
 				<h2>Haute École Albert Jacquard</h2>
 				<p>Bachelor in Web Design &amp; Multimedia.</p>
+				<ul class="resume-tags">
+					<li>Web design</li><li>Multimedia</li>
+				</ul>
 			</li>
 
 		</ul>

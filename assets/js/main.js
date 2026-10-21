@@ -7,8 +7,11 @@
  */
 
 /* -------------------------------------------------------------------------- *
- * Color me: restore a saved palette immediately (before first paint, since
- * this script is deferred) so themed pages don't flash the default colors.
+ * Color me: the palette is restored before the first paint by the inline
+ * script in each page's <head> — this file is deferred, so it runs after
+ * parsing and would repaint the page a second time. The restore below is
+ * only a backstop for that inline script; the toggle itself lives further
+ * down, in the DOMContentLoaded block.
  * -------------------------------------------------------------------------- */
 const COLOR_ME_STORAGE = "colorMePalette";
 const COLOR_ME_ACTIVE = "colorMeActive";
@@ -20,12 +23,20 @@ const applyPalette = (palette) => {
             document.documentElement.style.setProperty(name, palette[name]);
         }
     });
+    // Mirrors the inline <head> restore: painting the canvas itself stops a
+    // white flash under a dark palette before the stylesheet applies.
+    if (palette["--bg"]) {
+        document.documentElement.style.backgroundColor = palette["--bg"];
+    }
 };
 
 const clearPalette = () => {
     COLOR_ME_VARS.forEach((name) =>
         document.documentElement.style.removeProperty(name)
     );
+    // Also drop the canvas colour set above, or switching "clr" off leaves
+    // the html element stuck on the old palette's background.
+    document.documentElement.style.removeProperty("background-color");
 };
 
 try {
@@ -407,34 +418,83 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
-        /* Placeholder send animation: the badge collapses to a dot, then a
-         * thank-you, two clinking beers and a burst of confetti. Swap the
-         * whole thing out when the final animation lands. */
+        /* Send sequence: the badge collapses the moment you submit, the
+         * filled-in form folds away, and the confirmation takes its place.
+         * The confirmation stays put — it is the receipt, so it must not
+         * fade back out to nothing. */
+        const sendAgainBtn = contactForm.querySelector(".send-again");
+
         const spawnConfetti = (host) => {
             const colors = ["--ink", "--accent", "--muted"];
-            for (let i = 0; i < 16; i += 1) {
+            for (let i = 0; i < 18; i += 1) {
                 const piece = document.createElement("span");
                 piece.className = "confetti";
-                piece.style.setProperty("--dx", `${(Math.random() - 0.5) * 220}px`);
-                piece.style.setProperty("--dy", `${-40 - Math.random() * 90}px`);
-                piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 720}deg`);
-                piece.style.backgroundColor = `var(${colors[i % colors.length]})`;
-                piece.style.animationDelay = `${0.45 + Math.random() * 0.25}s`;
-                if (i % 3 === 0) piece.style.borderRadius = "50%";
+                // Fan upwards. The glasses sit against the left margin, so
+                // the sideways throw is damped — a round burst would send
+                // half the hearts off the edge of the page.
+                const angle = (Math.PI * (0.08 + 0.84 * (i / 17))) * -1;
+                const power = 80 + Math.random() * 70;
+                piece.style.setProperty("--dx", `${Math.cos(angle) * power * 0.5}px`);
+                piece.style.setProperty("--dy", `${Math.sin(angle) * power * 1.15}px`);
+                piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 540}deg`);
+                // A glyph rather than a coloured box, so the hearts still take
+                // their colour from the palette the "clr" switch generates.
+                piece.textContent = "\u2665";
+                piece.style.color = `var(${colors[i % colors.length]})`;
+                piece.style.setProperty("--size", `${11 + Math.random() * 9}px`);
+                // Tight stagger: the burst should read as one pop, not a drizzle.
+                piece.style.animationDelay = `${Math.random() * 0.12}s`;
                 host.appendChild(piece);
             }
         };
 
-        const celebrate = () => {
+        /** Collapse the badge straight away, so submitting feels instant even
+         *  when the network takes its time. Reversible — a failed send puts
+         *  the badge back. */
+        const startSending = () => {
             submitBtn.classList.add("is-sending");
-            // Wait out the shrink-to-a-dot transition before swapping in the
-            // celebration, so the two don't overlap.
-            setTimeout(() => {
-                submitBtn.style.display = "none";
-                celebration.classList.add("is-active");
-                spawnConfetti(celebration);
-            }, 480);
+            submitBtn.disabled = true;
         };
+
+        const stopSending = () => {
+            submitBtn.classList.remove("is-sending");
+            submitBtn.disabled = false;
+        };
+
+        const celebrate = () => {
+            // Fold the form away and wipe what was typed: the message is gone,
+            // so leaving the old text sitting there invites a double send.
+            contactForm.classList.add("is-sent");
+            contactForm.reset();
+            [...contactForm.querySelectorAll(".field-error")].forEach((error) =>
+                error.classList.remove("appear")
+            );
+
+            // Let the fields finish folding before the receipt lands on top.
+            setTimeout(() => {
+                celebration.classList.add("is-active");
+                spawnConfetti(celebration.querySelector(".send-beers"));
+                // Move the reading position to the receipt for keyboard and
+                // screen-reader users, who cannot see the form disappear.
+                sendAgainBtn.focus({ preventScroll: true });
+            }, 260);
+        };
+
+        /** Put the form back for a second message. */
+        const resetForm = () => {
+            celebration
+                .querySelectorAll(".confetti")
+                .forEach((piece) => piece.remove());
+            celebration.classList.remove("is-active");
+            contactForm.classList.remove("is-sent");
+            stopSending();
+            formFeedback.textContent = "";
+            formFeedback.classList.remove("appear");
+            sending = false;
+            contactForm.elements.name.focus();
+        };
+
+        sendAgainBtn.addEventListener("click", resetForm);
 
         const openMailApp = ({ name, email, message }) => {
             const subject = encodeURIComponent(`Hey Bruno — note from ${name}`);
@@ -487,11 +547,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 honeypot.value !== "" ||
                 Date.now() - formReadyAt < MIN_FILL_TIME_MS;
             if (looksLikeBot) {
+                startSending();
                 celebrate();
                 return;
             }
 
             sending = true;
+            startSending(); // instant feedback, before the network is involved
             try {
                 const how = await deliver(payload);
                 celebrate();
@@ -499,7 +561,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     showFeedback(formFeedback, "opening your mail app… 🍺");
                 }
             } catch (error) {
+                // Nothing was sent: give the badge back so they can retry,
+                // and leave everything they typed exactly where it was.
                 sending = false;
+                stopSending();
                 showFeedback(
                     formFeedback,
                     `that didn't go through — mail me at ${CONTACT_EMAIL}`

@@ -707,10 +707,43 @@ footer .geo {
 
 .resume-item {
 
+  position: relative;
   padding-bottom: 80px;
   border-left: 2px solid var(--ink);
   padding: 40px 20px;
   margin-bottom: 40px;
+}
+
+/* Each entry is a dot on a continuous rail, so the career reads as one
+   thread, with its skills listed as tags underneath. */
+.resume-item::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 46px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.resume-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resume-tags li {
+  padding: 5px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 30px;
+  font-family: syne-semi;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .test {
@@ -1029,23 +1062,29 @@ footer .geo {
    the home page's "let's discuss" link so all three read as one component.
    Works on both <button> and <a>. */
 .pill-badge {
-  font-family: syne-bold;
+  /* Same type and measure as the about page's click-game badge
+     (.click-game:after): inherited Syne at 12px, a 60px measure and 20px of
+     padding, so every badge on the site is the same object. Syne rather than
+     syne-bold matters for size as well as texture — in the bold cut
+     "discuss" and "another" are wider than the 60px measure and would force
+     the badge to grow; in Syne they fit, so the badge stays round. */
   font-size: 12px;
-  letter-spacing: 0.06em;
+  /* A <button> does not inherit letter-spacing through the UA stylesheet, so
+     it came out "normal" while the click-game badge inherited the body's
+     tracking. Inherit explicitly so all the badges are tracked alike. */
+  letter-spacing: inherit;
   text-align: center;
   color: var(--bg);
   background-color: var(--ink);
   border: none;
   display: block;
-  /* content-box + the same 60px measure as the click-game badge, so the two
-     read as the same component. */
   box-sizing: content-box;
   padding: 20px;
-  max-width: 60px;
-  /* min-width beats max-width in CSS, so a label whose longest word is wider
-     than the 60px measure ("discuss") widens the badge instead of spilling
-     out of it. Shorter labels ("Send") keep the 60px default. */
-  min-width: min-content;
+  /* An explicit width, not max-width: a <button> shrinks to fit its label
+     ("Send" gave a 37px box) while a block <a> fills to the cap, so the two
+     came out different sizes. Fixing the measure makes every badge the same
+     100px across, like the click-game one. */
+  width: 60px;
   border-radius: 30px;
   margin: 40px 0;
   animation: rotating 42s infinite linear;
@@ -1080,11 +1119,39 @@ footer .geo {
               rotate .45s ease;
 }
 
-/* Placeholder celebration — swap for the final animation later. */
+/* Send confirmation. It replaces the form rather than sitting under it, and
+   it stays on screen: this is the receipt for a message that is already gone,
+   so it must not fade away to nothing. */
+
+/* The filled-in fields fold up as the message leaves. Collapsing the space
+   matters as much as the fade: left in flow, the receipt ends up marooned at
+   the bottom of a tall empty gap where the form used to be. */
+.contact-form.is-sent .form-field {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: opacity .22s ease, transform .22s ease,
+              max-height .32s ease .06s, margin .32s ease .06s;
+}
+
+/* The badge animates itself (.is-sending collapses it to a dot); this rule
+   only reclaims the 134px of space it leaves behind, and waits for that
+   animation to finish first. Setting `transform` here would override the
+   dot collapse, since this selector is the more specific one. */
+.contact-form.is-sent .submit-btn {
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height .3s ease .28s, margin .3s ease .28s;
+}
+
 .send-celebration {
   position: relative;
   display: none;
-  height: 130px;
   margin: 40px 0;
 }
 
@@ -1092,72 +1159,119 @@ footer .geo {
   display: block;
 }
 
-.send-thanks {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 0;
+/* Scoped under .send-celebration so these beat `.main-section p`, which is
+   the more specific selector and was forcing a 40px gap on both. */
+.send-celebration .send-thanks {
+  margin: 0 0 6px;
   font-family: syne-bold;
-  font-size: 24px;
+  font-size: 40px;
+  line-height: 1.1;
   letter-spacing: 0.06em;
   color: var(--ink);
   opacity: 0;
-  animation: thanks-fade 2.6s ease forwards;
+  animation: thanks-in .5s cubic-bezier(.2, .8, .3, 1) forwards;
 }
 
-@keyframes thanks-fade {
-  0%   { opacity: 0; translate: 0 10px; }
-  18%  { opacity: 1; translate: 0 0; }
-  68%  { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes thanks-in {
+  from { opacity: 0; translate: 0 12px; }
+  to   { opacity: 1; translate: 0 0; }
 }
 
-.send-beer {
-  position: absolute;
-  top: 52px;
-  font-size: 40px;
+.send-celebration .send-note {
+  max-width: 50ch;
+  margin: 0 0 24px;
+  font-family: syne-semi;
+  font-size: 14px;
+  color: var(--muted);
+  opacity: 0;
+  animation: thanks-in .5s ease .14s forwards;
+}
+
+/* The two glasses sit on their own row above the heading, in a box the
+   hearts can burst out of. */
+.send-beers {
+  position: relative;
+  display: inline-flex;
+  margin-bottom: 14px;
+  font-size: 44px;
   line-height: 1;
 }
 
-.send-beer-left  { left: 0;    animation: cheers-left  .9s ease .1s both; }
-.send-beer-right { left: 54px; animation: cheers-right .9s ease .1s both; }
+.send-beer {
+  display: inline-block;
+}
 
+/* The mug glyph is drawn handle-on-the-right, so mirroring the left one
+   turns the pair inwards and they clink face to face. */
+.send-beer-left {
+  transform: scaleX(-1);
+}
+
+.send-beer-left  { animation: cheers-left  .6s cubic-bezier(.3, 1.4, .5, 1) .1s both; }
+.send-beer-right { animation: cheers-right .6s cubic-bezier(.3, 1.4, .5, 1) .1s both; }
+
+/* `translate`/`rotate` are separate properties here, so they stack with the
+   `transform: scaleX(-1)` mirror instead of cancelling it. */
 @keyframes cheers-left {
-  0%   { opacity: 0; translate: -36px 0; rotate: -28deg; }
-  55%  { opacity: 1; translate: 8px 0;   rotate: 14deg; }
-  75%  { translate: 0 0; rotate: 0deg; }
-  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+  0%   { opacity: 0; translate: -22px 0; rotate: 26deg; }
+  60%  { opacity: 1; translate: 3px 0;   rotate: -10deg; }
+  100% { opacity: 1; translate: 0 0;     rotate: 0deg; }
 }
 
 @keyframes cheers-right {
-  0%   { opacity: 0; translate: 36px 0;  rotate: 28deg; }
-  55%  { opacity: 1; translate: -8px 0;  rotate: -14deg; }
-  75%  { translate: 0 0; rotate: 0deg; }
-  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+  0%   { opacity: 0; translate: 22px 0;  rotate: 26deg; }
+  60%  { opacity: 1; translate: -3px 0;  rotate: -10deg; }
+  100% { opacity: 1; translate: 0 0;     rotate: 0deg; }
 }
 
-/* Confetti pieces are created by main.js; --dx/--dy/--rot randomize each. */
+/* Confetti is created by main.js inside .send-beers, so the burst comes out
+   of the glasses at the moment they meet. --dx/--dy/--rot randomise each. */
 .confetti {
   position: absolute;
-  top: 60px;
-  left: 46px;
-  width: 8px;
-  height: 8px;
+  top: 50%;
+  left: 50%;
+  font-size: var(--size, 14px);
+  line-height: 1;
   opacity: 0;
-  animation: confetti-pop 1s ease-out .45s forwards;
+  pointer-events: none;
+  animation: confetti-pop .9s cubic-bezier(.15, .7, .3, 1) .34s forwards;
 }
 
 @keyframes confetti-pop {
-  0%   { opacity: 1; translate: 0 0;               rotate: 0deg; }
-  100% { opacity: 0; translate: var(--dx) var(--dy); rotate: var(--rot); }
+  0%   { opacity: 1; translate: 0 0; rotate: 0deg; scale: .4; }
+  70%  { opacity: 1; }
+  100% {
+    opacity: 0;
+    translate: var(--dx) var(--dy);
+    rotate: var(--rot);
+    scale: 1;
+  }
+}
+
+/* "send another" is a .pill-badge like the submit button and the home page's
+   CTA, so it inherits their shape, type and fill. The fade-in lives on the
+   wrapper: put it on the button and it would replace the badge's spin, and
+   the badge's hover rule (animation: none) would drop the button back to
+   opacity 0 and make it vanish under the cursor. */
+.send-again-wrap {
+  margin: 0;
+  opacity: 0;
+  animation: thanks-in .5s ease .28s forwards;
+}
+
+.send-again {
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pill-badge,
   .send-thanks,
+  .send-note,
+  .send-again,
   .send-beer,
   .confetti {
     animation: none;
+    opacity: 1;
   }
 
   .submit-btn.is-sending {

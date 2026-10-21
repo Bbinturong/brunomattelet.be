@@ -6,11 +6,33 @@
 	<meta name="description" content="Contact Bruno Mattelet — drop a note, discuss a project, grab a beer in Brussels.">
 	<link rel="preload" href="assets/style/font/Syne-Bold.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="assets/style/font/faction.woff2" as="font" type="font/woff2" crossorigin>
+	<script>
+	/* Restores the saved "clr" palette before the first paint. This must stay
+	   inline and blocking: main.js is deferred, which runs *after* parsing, so
+	   leaving the job to it paints the default colours first and the page
+	   visibly changes colour on every navigation. The html background is set
+	   too, so the canvas itself never flashes white under a dark palette. */
+	(function () {
+	    try {
+	        if (localStorage.getItem("colorMeActive") !== "1") return;
+	        var p = JSON.parse(localStorage.getItem("colorMePalette") || "null");
+	        if (!p) return;
+	        var s = document.documentElement.style;
+	        ["--bg", "--ink", "--muted", "--soft", "--accent"].forEach(function (k) {
+	            if (p[k]) s.setProperty(k, p[k]);
+	        });
+	        if (p["--bg"]) s.backgroundColor = p["--bg"];
+	    } catch (e) {
+	        /* corrupt or blocked storage: the default palette applies */
+	    }
+	})();
+	</script>
+
 	<link rel="stylesheet" type="text/css" href="assets/style/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
 	<link rel="icon" type="image/png" href="assets/images/favicon.png" />
 
-	<script src="assets/js/components.js" defer></script>
+	<script src="assets/js/components.js"></script>
 	<script src="assets/js/main.js" defer></script>
 
 	<title>cntct brn mttlt</title>
@@ -54,11 +76,19 @@
 
 			<button type="submit" class="pill-badge submit-btn cursor-chat">Send</button>
 
-			<!-- Placeholder send celebration; confetti is added by main.js. -->
-			<div class="send-celebration" aria-hidden="true">
-				<p class="send-thanks">thank you</p>
-				<span class="send-beer send-beer-left">🍺</span>
-				<span class="send-beer send-beer-right">🍺</span>
+			<!-- Send confirmation. Takes the form's place once the message
+			     is away; confetti is added by main.js. role="status" so it is
+			     announced rather than only seen. -->
+			<div class="send-celebration" role="status">
+				<div class="send-beers" aria-hidden="true">
+					<span class="send-beer send-beer-left">🍺</span>
+					<span class="send-beer send-beer-right">🍺</span>
+				</div>
+				<p class="send-thanks">Thank you</p>
+				<p class="send-note">Your message is on its way, I'll get back to you soon.</p>
+				<p class="send-again-wrap">
+					<button type="button" class="pill-badge send-again cursor-chat">send another</button>
+				</p>
 			</div>
 
 			<p class="form-feedback" aria-live="polite"></p>
