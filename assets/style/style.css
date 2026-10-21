@@ -708,19 +708,28 @@ footer .geo {
 .resume-item {
 
   position: relative;
-  padding-bottom: 80px;
   border-left: 2px solid var(--ink);
-  padding: 40px 20px;
-  margin-bottom: 40px;
+  /* Spacing lives in the padding, not a margin: a margin breaks the left
+     border between entries and the rail comes out dashed. */
+  padding: 40px 20px 60px;
+  margin-bottom: 0;
 }
 
 /* Each entry is a dot on a continuous rail, so the career reads as one
    thread, with its skills listed as tags underneath. */
-.resume-item::before {
+/* The dot hangs off the date rather than the entry, so it stays centred on
+   the date line instead of drifting whenever the padding changes. */
+.resume-item h4 {
+  position: relative;
+}
+
+.resume-item h4::before {
   content: '';
   position: absolute;
-  left: -9px;
-  top: 46px;
+  /* back out through the 20px padding and onto the 2px border's centre */
+  left: -29px;
+  top: 50%;
+  translate: 0 -50%;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -1520,7 +1529,6 @@ footer .geo {
 
   .resume-item {
     padding: 20px 10px;
-    margin-bottom: 20px;
   }
 
   .resume-decoration-parent {
@@ -1532,7 +1540,6 @@ footer .geo {
     position: static; /* Remove sticky positioning */
     height: 200px;
     width: 100%;
-    margin-top: 40px; /* Add space above it */
   }
 }
 

@@ -23,20 +23,15 @@ const applyPalette = (palette) => {
             document.documentElement.style.setProperty(name, palette[name]);
         }
     });
-    // Mirrors the inline <head> restore: painting the canvas itself stops a
-    // white flash under a dark palette before the stylesheet applies.
-    if (palette["--bg"]) {
-        document.documentElement.style.backgroundColor = palette["--bg"];
-    }
 };
 
 const clearPalette = () => {
     COLOR_ME_VARS.forEach((name) =>
         document.documentElement.style.removeProperty(name)
     );
-    // Also drop the canvas colour set above, or switching "clr" off leaves
-    // the html element stuck on the old palette's background.
-    document.documentElement.style.removeProperty("background-color");
+    // Nothing else to clear: <html> deliberately has no background of its
+    // own, so that <body> keeps propagating its own to the canvas and the
+    // decorative .squared frame (z-index -99999) stays visible.
 };
 
 try {

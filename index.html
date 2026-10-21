@@ -26,8 +26,7 @@
             ["--bg", "--ink", "--muted", "--soft", "--accent"].forEach(function (k) {
                 if (p[k]) s.setProperty(k, p[k]);
             });
-            if (p["--bg"]) s.backgroundColor = p["--bg"];
-        } catch (e) {
+            } catch (e) {
             /* corrupt or blocked storage: the default palette applies */
         }
     })();
