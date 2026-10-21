@@ -697,6 +697,17 @@ footer .geo {
 }
 
 
+/* Job title, sitting between the company and the description. Smaller than
+   the company but still in --ink, so it reads as part of the heading rather
+   than as another muted meta line like the date. */
+.resume-role {
+  font-family: syne-semi;
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 8px 0;
+  color: var(--ink);
+}
+
 .resume-list p {
 
   font-family: syne-semi;
