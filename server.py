@@ -17,7 +17,10 @@ so the API cannot be used to grow the table or inject SQL.
 """
 import json
 import sqlite3
+import time
+from collections import defaultdict, deque
 from contextlib import closing
+from threading import Lock
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -41,6 +44,45 @@ MAX_BODY_BYTES = 1024
 # SQLite database, the schema, this script, dotfiles — is refused, so the
 # server cannot hand out the repository it is running from. `.git` is the
 # important one: it holds the whole commit history, not just what is live.
+# Increment is the only endpoint that writes, so it is the only one worth
+# flooding. A counter is a toy, not a statistic: allow enthusiastic clicking
+# and cut off scripted abuse.
+RATE_LIMIT_MAX = 30        # increments ...
+RATE_LIMIT_WINDOW = 60.0   # ... per this many seconds, per client
+RATE_LIMIT_MAX_CLIENTS = 1024
+
+# Every request arrives from the proxy when one is in front, so the client
+# address alone would rate-limit the whole internet as a single visitor.
+# Turn this on ONLY behind a proxy that overwrites X-Forwarded-For, otherwise
+# anyone can forge the header and dodge the limit entirely.
+TRUST_PROXY_HEADER = False
+
+_rate_hits = defaultdict(deque)
+_rate_lock = Lock()
+
+
+def rate_limit_retry_after(client):
+    """Seconds the client must wait, or 0.0 when the request is allowed."""
+    now = time.monotonic()
+    cutoff = now - RATE_LIMIT_WINDOW
+    with _rate_lock:
+        # Drop clients whose window has fully expired, so a long uptime or a
+        # spray of random source addresses cannot grow this table forever.
+        if len(_rate_hits) > RATE_LIMIT_MAX_CLIENTS:
+            for key in [
+                k for k, v in _rate_hits.items() if not v or v[-1] <= cutoff
+            ]:
+                del _rate_hits[key]
+
+        hits = _rate_hits[client]
+        while hits and hits[0] <= cutoff:
+            hits.popleft()
+        if len(hits) >= RATE_LIMIT_MAX:
+            return RATE_LIMIT_WINDOW - (now - hits[0])
+        hits.append(now)
+        return 0.0
+
+
 PUBLIC_SUFFIXES = {
     ".html", ".css", ".js", ".mjs", ".json", ".txt", ".xml", ".webmanifest",
     ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".avif", ".ico",
@@ -70,6 +112,13 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
+    def _client_id(self):
+        if TRUST_PROXY_HEADER:
+            forwarded = self.headers.get("X-Forwarded-For", "")
+            if forwarded:
+                return forwarded.split(",")[0].strip()
+        return self.client_address[0]
+
     def _is_public(self, path):
         """True when `path` is site content a visitor may fetch."""
         relative = Path(self.translate_path(path)).relative_to(ROOT)
@@ -88,11 +137,13 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store, must-revalidate")
         super().end_headers()
 
-    def _send_json(self, payload, status=200):
+    def _send_json(self, payload, status=200, headers=None):
         body = json.dumps(payload).encode()
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
+        for key, value in (headers or {}).items():
+            self.send_header(key, value)
         self.end_headers()
         self.wfile.write(body)
 
@@ -130,6 +181,15 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path != "/api/skills/increment":
             return self._send_json({"error": "not found"}, 404)
+
+        retry_after = rate_limit_retry_after(self._client_id())
+        if retry_after:
+            self._send_json(
+                {"error": "too many clicks, slow down"},
+                429,
+                headers={"Retry-After": str(max(1, int(retry_after) + 1))},
+            )
+            return
 
         try:
             length = int(self.headers.get("Content-Length", 0))
